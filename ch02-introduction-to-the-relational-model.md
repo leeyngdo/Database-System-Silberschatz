@@ -32,7 +32,7 @@
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> Inserting the _instructor_ tuple $t$ such that $t.{\textrm{dept}\_\textrm{name}} = \textrm{"Medical"}$
+> Inserting the _instructor_ tuple $t$ such that $t.{\textrm{dept} \_{-} \textrm{name}} = \textrm{"Medical"}$
 > Deleting the _department_ tuple $(\textrm{Elec. Eng.}, \textrm{Taylor}, 85000)$
 
 </details><br>
@@ -47,14 +47,14 @@
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> Inserting the _instructor_ tuple $t$ such that $t.{\textrm{dept}\_\textrm{name}} = \textrm{"Medical"}$
+> Inserting the _instructor_ tuple $t$ such that $t.{\textrm{dept}\_{-}\textrm{name}} = \textrm{"Medical"}$
 > Deleting the _department_ tuple $(\textrm{Elec. Eng.}, \textrm{Taylor}, 85000)$
 
 </details><br>
 
 # 2.5
 
-**Question**. What is the result of first performing the Cartesian product of <em>student</em> and <em>advisor</em>, and then performing a selection operation on the result with the predicate <em>s_id</em> = ID? (Using the symbolic notation of relational algebra, this query can be written as $\sigma_{\textrm{s}\_\textrm{id}=\textrm{ID}}(\textrm{student} \times \textrm{advisor})$.)
+**Question**. What is the result of first performing the Cartesian product of <em>student</em> and <em>advisor</em>, and then performing a selection operation on the result with the predicate <em>s_id</em> = ID? (Using the symbolic notation of relational algebra, this query can be written as $\sigma_{\textrm{s}\_{-}\textrm{id}=\textrm{ID}}(\textrm{student} \times \textrm{advisor})$.)
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
@@ -74,9 +74,9 @@
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> **a.** $\Pi_{\textrm{person} \_ \textrm{name}} (\sigma_{\textrm{city} = \textrm{"Miami"}} (\textrm{employee}))$ <br>
-> **b.** $\Pi_{\textrm{person} \_ \textrm{name}} (\sigma_{\textrm{salary} > \$ 100000} (\textrm{works}))$ <br>
-> **c.** $\Pi_{\textrm{person} \_ \textrm{name}} (\textrm{employee} \bowtie_{\textrm{city} = \textrm{"Miami"} \wedge \textrm{salary} > \$ 100000} \textrm{works})$ <br>
+> **a.** $`\Pi_{\textrm{person} \_{-} \textrm{name}} (\sigma_{\textrm{city} = \textrm{"Miami"}} (\textrm{employee}))`$ <br>
+> **b.** $`\Pi_{\textrm{person} \_{-} \textrm{name}} (\sigma_{\textrm{salary} > \$ 100000} (\textrm{works}))`$ <br>
+> **c.** $`\Pi_{\textrm{person} \_{-} \textrm{name}} (\textrm{employee} \bowtie_{\textrm{city} = "\textrm{Miami}" \wedge \textrm{salary} > \$ 100000} \textrm{works})`$ <br>
 
 </details><br>
 
@@ -95,8 +95,8 @@
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> **a.** $\Pi_{\textrm{branch} \_ \textrm{name}} (\sigma_{\textrm{branch} \_ \textrm{city} = \textrm{"Chicago"}} (\textrm{branch}))$ <br>
-> **b.** $\Pi_{\textrm{ID}} (\sigma_{\textrm{branch} \_ \textrm{name} = \textrm{"Downtown"}} (\textrm{borrower} \bowtie_{\textrm{borrower}.\textrm{loan} \_ \textrm{number} = \textrm{loan}.\textrm{loan} \_ \textrm{number}} \textrm{\textrm{loan}}))$ <br>
+> **a.** $\Pi_{\textrm{branch} \_{-} \textrm{name}} (\sigma_{\textrm{branch} \_{-} \textrm{city} = \textrm{"Chicago"}} (\textrm{branch}))$ <br>
+> **b.** $\Pi_{\textrm{ID}} (\sigma_{\textrm{branch} \_{-} \textrm{name} = \textrm{"Downtown"}} (\textrm{borrower} \bowtie_{\textrm{borrower}.\textrm{loan} \_{-} \textrm{number} = \textrm{loan}.\textrm{loan} \_{-} \textrm{number}} \textrm{\textrm{loan}}))$ <br>
 
 </details><br>
 
@@ -113,9 +113,9 @@
 
 I guess finding ID is an errata;
 
-> **a.** $\Pi_{\textrm{person} \_ \textrm{name}} (\textrm{employee}) - \Pi_{\textrm{person} \_ \textrm{name}} (\sigma_{\textrm{company} \_ \textrm{name} = \textrm{"BigBank"}} (\textrm{works}))$
+> **a.** $\Pi_{\textrm{person} \_{-} \textrm{name}} (\textrm{employee}) - \Pi_{\textrm{person} \_{-} \textrm{name}} (\sigma_{\textrm{company} \_{-} \textrm{name} = \textrm{"BigBank"}} (\textrm{works}))$
 
-> **b.** $\Pi_{i.\textrm{person} \_ \textrm{name}} (\rho_{i} (\textrm{works}) \bowtie_{i.\textrm{salary} \geq j.\textrm{salary} \wedge i.\textrm{person} \_ \textrm{name} \neq j.\textrm{person} \_ \textrm{name}} \rho_{j} (\textrm{works})))$ <br>
+> **b.** $\Pi_{i.\textrm{person} \_{-} \textrm{name}} (\rho_{i} (\textrm{works}) \bowtie_{i.\textrm{salary} \geq j.\textrm{salary} \wedge i.\textrm{person} \_{-} \textrm{name} \neq j.\textrm{person} \_{-} \textrm{name}} \rho_{j} (\textrm{works})))$ <br>
 
 </details><br>
 
@@ -142,9 +142,9 @@ I guess finding ID is an errata;
 
 I guess finding ID is an errata;
 
-> **a.** $\Pi_{\textrm{person} \_ \textrm{name}} (\textrm{employee}) - \Pi_{\textrm{person} \_ \textrm{name}} (\sigma_{\textrm{company} \_ \textrm{name} = \textrm{"BigBank"}} (\textrm{works}))$
+> **a.** $\Pi_{\textrm{person} \_{-} \textrm{name}} (\textrm{employee}) - \Pi_{\textrm{person} \_{-} \textrm{name}} (\sigma_{\textrm{company} \_{-} \textrm{name} = \textrm{"BigBank"}} (\textrm{works}))$
 
-> **b.** $\Pi_{i.\textrm{person} \_ \textrm{name}} (\rho_{i} (\textrm{works}) \bowtie_{i.\textrm{salary} \geq j.\textrm{salary} \wedge i.\textrm{person} \_ \textrm{name} \neq j.\textrm{person} \_ \textrm{name}} \rho_{j} (\textrm{works})))$ <br>
+> **b.** $\Pi_{i.\textrm{person} \_{-} \textrm{name}} (\rho_{i} (\textrm{works}) \bowtie_{i.\textrm{salary} \geq j.\textrm{salary} \wedge i.\textrm{person} \_{-} \textrm{name} \neq j.\textrm{person} \_{-} \textrm{name}} \rho_{j} (\textrm{works})))$ <br>
 
 
 </details><br>
@@ -184,10 +184,10 @@ I guess finding ID is an errata;
 
 I guess finding ID is an errata;
 
-> **a.** $\Pi_{\textrm{employee}.\textrm{person}\_\textrm{name}} (\sigma_{\textrm{company}\_\textrm{name} = ``\textrm{BigBank}"} (\textrm{employee} \bowtie_{\textrm{employee}.\textrm{person}\_\textrm{name} = \textrm{works}.\textrm{person}\_\textrm{name}} \textrm{works}))$ <br>
-> **b.** $\Pi_{\textrm{employee}.\textrm{person}\_\textrm{name}, \textrm{city}} (\sigma_{\textrm{company}\_\textrm{name} = ``\textrm{BigBank}"} (\textrm{employee} \bowtie_{\textrm{employee}.\textrm{person}\_\textrm{name} = \textrm{works}.\textrm{person}\_\textrm{name}} \textrm{works}))$ <br>
-> **c.** $\Pi_{\textrm{employee}.\textrm{person}\_\textrm{name}, \textrm{street}, \textrm{city}} (\sigma_{\textrm{company}\_\textrm{name} = ``\textrm{BigBank}" \wedge \textrm{salary} > \$10000} (\textrm{employee} \bowtie_{\textrm{employee}.\textrm{person}\_\textrm{name} = \textrm{works}.\textrm{person}\_\textrm{name}} \textrm{works}))$  <br>
-> **d.** $\Pi_{\textrm{employee}.\textrm{person}\_\textrm{name}} (\sigma_{\textrm{employee}.\textrm{city} = \textrm{company}.\textrm{city}} (\textrm{employee} \bowtie_{\textrm{employee}.\textrm{person}\_\textrm{name} = \textrm{works}.\textrm{person}\_\textrm{name}} \textrm{works} \bowtie_{\textrm{works}.\textrm{company}\_\textrm{name} = \textrm{company}.\textrm{company}\_\textrm{name}} \textrm{company} ))$ <br>
+> **a.** $`\Pi_{\textrm{employee}.\textrm{person}\_{-}\textrm{name}} (\sigma_{\textrm{company}\_{-}\textrm{name} = "\textrm{BigBank}"} (\textrm{employee} \bowtie_{\textrm{employee}.\textrm{person}\_{-}\textrm{name} = \textrm{works}.\textrm{person}\_{-}\textrm{name}} \textrm{works}))`$ <br>
+> **b.** $`\Pi_{\textrm{employee}.\textrm{person}\_{-}\textrm{name}, \textrm{city}} (\sigma_{\textrm{company}\_{-}\textrm{name} = "\textrm{BigBank}"} (\textrm{employee} \bowtie_{\textrm{employee}.\textrm{person}\_{-}\textrm{name} = \textrm{works}.\textrm{person}\_{-}\textrm{name}} \textrm{works}))`$ <br>
+> **c.** $`\Pi_{\textrm{employee}.\textrm{person}\_{-}\textrm{name}, \textrm{street}, \textrm{city}} (\sigma_{\textrm{company}\_{-}\textrm{name} = "\textrm{BigBank}" \wedge \textrm{salary} > \$10000} (\textrm{employee} \bowtie_{\textrm{employee}.\textrm{person}\_{-}\textrm{name} = \textrm{works}.\textrm{person}\_{-}\textrm{name}} \textrm{works}))`$  <br>
+> **d.** $`\Pi_{\textrm{employee}.\textrm{person}\_{-}\textrm{name}} (\sigma_{\textrm{employee}.\textrm{city} = \textrm{company}.\textrm{city}} (\textrm{employee} \bowtie_{\textrm{employee}.\textrm{person}\_{-}\textrm{name} = \textrm{works}.\textrm{person}\_{-}\textrm{name}} \textrm{works} \bowtie_{\textrm{works}.\textrm{company}\_{-}\textrm{name} = \textrm{company}.\textrm{company}\_{-}\textrm{name}} \textrm{company} ))`$ <br>
 
 </details><br>
 
@@ -203,9 +203,9 @@ I guess finding ID is an errata;
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> **a.** $\Pi_{\textrm{loan}\_\textrm{number}} (\sigma_{\textrm{amount} > \$10000} (\textrm{loan}))$ <br>
-> **b.** $\Pi_{\textrm{ID}} (\sigma_{\textrm{balance} > \$6000} ( \textrm{depositor} \bowtie_{\textrm{depositor}.\textrm{account}\_\textrm{name} = \textrm{account}.\textrm{account}\_\textrm{name}} \textrm{account}))$ <br>
-> **c.** $\Pi_{\textrm{ID}} (\sigma_{\textrm{balance} > \$6000 \wedge \textrm{branch}\_\textrm{name} = ``\textrm{Uptown}"} ( \textrm{depositor} \bowtie_{\textrm{depositor}.\textrm{account}\_\textrm{name} = \textrm{account}.\textrm{account}\_\textrm{name}} \textrm{account}))$ <br>
+> **a.** $`\Pi_{\textrm{loan}\_{-}\textrm{number}} (\sigma_{\textrm{amount} > \$10000} (\textrm{loan}))`$ <br>
+> **b.** $`\Pi_{\textrm{ID}} (\sigma_{\textrm{balance} >d\$6000} ( \textrm{depositor} \bowtie_{\textrm{depositor}.\textrm{account}\_{-}\textrm{name} = \textrm{account}.\textrm{account}\_{-}\textrm{name}} \textrm{account}))`$ <br>
+> **c.** $`\Pi_{\textrm{ID}} (\sigma_{\textrm{balance} > \$6000 \wedge \textrm{branch}\_{-}\textrm{name} = "\textrm{Uptown}"} ( \textrm{depositor} \bowtie_{\textrm{depositor}.\textrm{account}\_{-}\textrm{name} = \textrm{account}.\textrm{account}\_{-}\textrm{name}} \textrm{account}))`$ <br>
 
 </details><br>
 
@@ -223,10 +223,10 @@ I guess finding ID is an errata;
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> **a.** $\Pi_{\textrm{ID}, \textrm{name}} (\sigma_{\textrm{dept}\_\textrm{name} = ``\textrm{Physics}"} (\textrm{instructor}))$ <br>
-> **b.** $\Pi_{\textrm{ID}, \textrm{name}} (\sigma_{\textrm{building} = ``\textrm{Watson}"} (\textrm{instructor} \bowtie_{\textrm{instructor}.\textrm{dept}\_\textrm{name} = \textrm{department}.\textrm{dept}\_\textrm{name}} \textrm{department} ))$ <br>
-> **c.** $\Pi_{\textrm{ID}, \textrm{name}} (\sigma_{\textrm{dept}\_\textrm{name} = ``\textrm{Comp. Sci.}"} (\rho_{S} (\textrm{student} \bowtie_{\textrm{student}.\textrm{ID} = \textrm{takes}.\textrm{ID}} \textrm{takes} \textrm{takes}) \bowtie_{S.\textrm{course}\_\textrm{id} = \textrm{course}.\textrm{course}\_\textrm{id}} \textrm{course}))$ <br>
+> **a.** $\Pi_{\textrm{ID}, \textrm{name}} (\sigma_{\textrm{dept}\_{-}\textrm{name} = "\textrm{Physics}"} (\textrm{instructor}))$ <br>
+> **b.** $\Pi_{\textrm{ID}, \textrm{name}} (\sigma_{\textrm{building} = "\textrm{Watson}"} (\textrm{instructor} \bowtie_{\textrm{instructor}.\textrm{dept}\_{-}\textrm{name} = \textrm{department}.\textrm{dept}\_{-}\textrm{name}} \textrm{department} ))$ <br>
+> **c.** $\Pi_{\textrm{ID}, \textrm{name}} (\sigma_{\textrm{dept}\_{-}\textrm{name} = "\textrm{Comp. Sci.}"} (\rho_{S} (\textrm{student} \bowtie_{\textrm{student}.\textrm{ID} = \textrm{takes}.\textrm{ID}} \textrm{takes} \textrm{takes}) \bowtie_{S.\textrm{course}\_{-}\textrm{id} = \textrm{course}.\textrm{course}\_{-}\textrm{id}} \textrm{course}))$ <br>
 > **d.** $\Pi_{\textrm{student}.\textrm{ID}, \textrm{name}} (\sigma_{\textrm{year} = 2018} \textrm{student} \bowtie_{\textrm{student}.\textrm{ID} = \textrm{takes}.\textrm{ID}} \textrm{takes})$ <br>
-> **e.** $\Pi_{\textrm{ID}, \textrm{name}} (\textrm{student}) - \Pi_{\textrm{student}.\textrm{ID}, \textrm{name}} (\sigma_{\textrm{year} = 2018} \textrm{student} \bowtie_{\textrm{student}.\textrm{ID} = \textrm{takes}.\textrm{ID}} \textrm{takes} \textrm{takes})$ <br>
+> **e.** $\Pi_{\textrm{ID}, \textrm{name}} (\textrm{student}) - \Pi_{\textrm{student}.\textrm{ID}, \textrm{name}} (\sigma_{\textrm{year} = 2018} \textrm{student} \bowtie_{\textrm{student}.\textrm{ID} = \textrm{takes}.\textrm{ID}} \textrm{takes})$ <br>
 
 </details><br>
