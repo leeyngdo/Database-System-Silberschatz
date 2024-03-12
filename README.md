@@ -7,7 +7,7 @@ It is important to note that potential inaccuracies or erroneous solutions may e
 
 ## Contents 
 
-* **Ch 2**. [Introduction to the Relational Model](ch02-families-of-sets.pdf)
+* **Ch 2**. [Introduction to the Relational Model](ch02-introduction-to-the-relational-model.md)
 * **Ch 3**. [Introduction to SQL](ch03-measures.pdf)
 * **Ch 4**. [Construction of measures](ch04-construction-of-measures.pdf)
 * **Ch 5**. [Measurable functions](ch05-measurable-functions.pdf)
