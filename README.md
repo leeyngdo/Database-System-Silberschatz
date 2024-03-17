@@ -7,9 +7,12 @@ It is important to note that potential inaccuracies or erroneous solutions may e
 
 ## Contents 
 
-* **Ch 2**. [Introduction to the Relational Model](ch02-introduction-to-the-relational-model.md)
-* **Ch 3**. [Introduction to SQL](ch03-measures.pdf)
-* **Ch 4**. [Intermediate SQL](ch04-construction-of-measures.pdf)
-* **Ch 5**. [Advanced SQL](ch05-measurable-functions.pdf)
-* **Ch 6**. [Database Design Using the E-R Model](ch06-the-lebesgue-integral.pdf)
-* **Ch 7**. [Relational Database Design](ch07-limit-theorems.pdf)
+| **Chapter** |       **Name**       |  **Note**  | **Solution** |
+|:-----------:|:--------------------:|:----------:|:------------:|
+|  **Ch 1.**  |     Introduction     | [[Click to Move]](/notes/ch1.md) | *SKIP* |
+|  **Ch 2.** | Introduction to the Relational Model | [[Click to Move]](/notes/ch2.md) | [[Click to Move]](ch02-introduction-to-the-relational-model.md) |
+|  **Ch 3.** | Introduction to SQL | [[Click to Move]](/notes/ch3.md) | [[Click to Move]](ch03-introduction-to-sql.md) |
+|  **Ch 4.** | Intermediate SQL | [[Click to Move]](/notes/ch3.md) | [[Click to Move]](ch03-introduction-to-sql.md) |
+|  **Ch 5.** | Advanced SQL | [[Click to Move]](/notes/ch3.md) | [[Click to Move]](ch03-introduction-to-sql.md) |
+|  **Ch 6.** | Database Design Using the E-R Mode | [[Click to Move]](/notes/ch3.md) | [[Click to Move]](ch03-introduction-to-sql.md) |
+|  **Ch 7.** | Relational Database Design | [[Click to Move]](/notes/ch3.md) | [[Click to Move]](ch03-introduction-to-sql.md) |
