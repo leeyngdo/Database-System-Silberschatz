@@ -19,6 +19,23 @@
 * [3.16](#316) <br>
 * [3.17](#317) <br>
 * [3.18](#318) <br>
+* [3.19](#319) <br>
+* [3.20](#320) <br>
+* [3.21](#321) <br>
+* [3.22](#322) <br>
+* [3.23](#323) <br>
+* [3.24](#324) <br>
+* [3.25](#325) <br>
+* [3.26](#326) <br>
+* [3.27](#327) <br>
+* [3.28](#328) <br>
+* [3.29](#329) <br>
+* [3.30](#330) <br>
+* [3.31](#331) <br>
+* [3.32](#332) <br>
+* [3.33](#333) <br>
+* [3.34](#334) <br>
+* [3.35](#335) <br>
 
 </details><br>
 
@@ -323,7 +340,29 @@ WHERE (
 > **a.**
 
 ```sql
+SELECT ID, (
+    CASE
+        WHEN score < 40 THEN 'F'
+        WHEN score < 60 THEN 'C'
+        WHEN score < 80 THEN 'B'
+        ELSE 'A'
+    END);
+FROM marks
+```
 
+> **b.**
+
+```sql
+SELECT grade, COUNT (DISTINCT ID) AS num 
+FROM (SELECT ID, ( 
+        CASE
+            WHEN score >= 80 THEN 'A'
+            WHEN 80 > score >= 60 THEN 'B'
+            WHEN 60 > score >= 40 THEN 'C'
+            ELSE 'F'
+        END) AS grade
+    FROM marks)
+GROUP BY grade
 ```
 
 </details><br>
@@ -333,6 +372,12 @@ WHERE (
 **Question**. The SQL **like** operator is case sensitive (in most systems), but the <code>lower()</code> function on strings can be used to perform case-insensitive matching. To show how, write a query that finds departments whose names contain the string "sci" as a substring, regardless of the case.
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
+
+```sql
+SELECT dept_name  
+FROM department
+WHERE LOWER (dept_name) LIKE '%sci%'
+```
 
 </details><br>
 
@@ -350,7 +395,9 @@ Under what conditions does the preceding query select values of <code>p.a1</code
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
+The query selects those values of <code>p.a1</code> that are equal to either value of <code>r1.a1</code> or <code>r2.a1</code> if and only if both <code>r1</code> and <code>r2</code> are non-empty. If one or both of <code>r1</code> and <code>r2</code> are empty, the Cartesian product of <code>p</code>, <code>r1</code> and <code>r2</code> is empty, hence the result of the query is empty. If <code>p</code> itself is empty, the result is empty.
 
+Mathmatically, $A \times B = \emptyset$ iff $A = \emptyset$ or $B = \emptyset$. If $A = \emptyset$ or $B = \emptyset$, then there is no $(a,b)$ such that $a \in A$ and $b \in B$, i.e. $(a, b) \in A \times B$. Therefore $A \times B$ is empty. Conversely, if both $A \neq \emptyset$ and $B \neq \emptyset$, there exists there exists $a \in A$ and $b \in B$, thus $(a, b) \in A \times B$. Therefore $A \times B \neq \emptyset$.
 
 </details><br>
 
@@ -524,9 +571,23 @@ WHERE ID = '12345'
 > **b.**
 
 ```sql
-UPDATE manages
-SET ~
-WHERE ID = '12345'
+UPDATE employee
+SET salary = salary * (
+    CASE 
+        WHEN 100000 < salary * 1.10 THEN 1.03
+        ELSE 1.10
+    END
+)
+WHERE ID IN (
+    SELECT employee.ID
+    FROM works
+    WHERE company_name = 'First Bank Corporation' AND 
+          works.ID IN (
+            --- Set of manager_id ---
+            SELECT DISTINCT manager_id
+            FROM manages
+          )
+    );
 ```
 
 </details><br>
@@ -705,10 +766,59 @@ WHERE course_id IN (
 
 # 3.13
 
-**Question**. Wr ite SQL DDL corresponding to the schema in Figure 3.17. Make any reasonable assumptions about data types, and be sure to declare primary and foreign keys.
+**Question**. Write SQL DDL corresponding to the schema in Figure 3.17. Make any reasonable assumptions about data types, and be sure to declare primary and foreign keys.
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
+```sql
+CREATE TABLE person (
+    driver_id   INT,
+    name        VARCHAR(20),
+    address     VARCHAR(20),
+
+    PRIMARY KEY (driver_id)
+);
+
+CREATE TABLE car (
+    license_plate   INT,
+    model           VARCHAR(20),
+    year            INT,
+
+    PRIMARY KEY (license_plate)
+);
+
+CREATE TABLE accident (
+    report_number   INT,
+    year            INT,
+    location        VARCHAR(20),
+
+    PRIMARY KEY (report_number)
+);
+
+CREATE TABLE owns (
+    driver_id       INT,
+    license_plate   INT,
+    
+    PRIMARY KEY (driver_id),
+    PRIMARY KEY (license_plate),
+    FOREIGN KEY (driver_id) REFERENCES person,
+    FOREIGN KEY (license_plate) REFERENCES car
+);
+
+CREATE TABLE participated (
+    report_number   INT,
+    license_plate   INT,
+    address         VARCHAR(20),
+    driver_id       INT,
+    damage_amount   INT,
+
+    PRIMARY KEY (report_number),
+    PRIMARY KEY (license_plate),
+    FOREIGN KEY (report_number) REFERENCES accident,
+    FOREIGN KEY (license_plate) REFERENCES car,
+    FOREIGN KEY (driver_id) REFERENCES person 
+);
+```
 
 </details><br>
 
@@ -892,6 +1002,43 @@ WHERE company_name = 'Small Bank Corporation'
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
+```sql
+CREATE TABLE employee (
+    ID             INT,
+    person_name    VARCHAR(20),
+    street         VARCHAR(20),
+    city           VARCHAR(20),
+
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE works (
+    ID             INT,
+    company_name   VARCHAR(20),
+    salary         INT,
+
+    PRIMARY KEY (ID),
+    FOREIGN KEY (ID) REFERENCES employee(ID),
+    FOREIGN KEY (company_name) REFERENCES company(company_name)
+);
+
+CREATE TABLE company (
+    company_name   VARCHAR(20),
+    city           VARCHAR(20),
+
+    PRIMARY KEY (company_name)
+);
+
+CREATE TABLE manages (
+    ID             INT,
+    manager_id     INT,
+
+    PRIMARY KEY (ID),
+    FOREIGN KEY (ID) REFERENCES employee(ID),
+    FOREIGN KEY (manager_id) REFERENCES employee(ID)
+);
+```
+
 </details><br>
 
 # 3.19
@@ -900,7 +1047,9 @@ WHERE company_name = 'Small Bank Corporation'
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
+> **Incomplete Data Entry**: Sometimes, during data entry, certain fields might not be filled out due to oversight or because the information is not available at the time of entry. For example, a user might not provide their middle name when filling out a form, leaving the corresponding field in the database as null.
 
+**Optional Fields**: In database schema design, certain fields may be designated as optional, meaning they are not required to have a value for every record. When these optional fields are not filled out, they will contain null values. This is common in scenarios where certain information might not be applicable to all records or where it's not mandatory to provide that information.
 
 </details><br>
 
@@ -977,7 +1126,7 @@ GROUP BY publisher, memb_no, name
 > **d.**
 
 ```sql
-SELECT COUNT(*) / (SELECT COUNT (DISTINCT member.memb_no) FROM member)
+SELECT 1.0 * COUNT(*) / (SELECT COUNT (DISTINCT member.memb_no) FROM member)
 FROM borrowed
 ```
 
@@ -1027,11 +1176,23 @@ Rewrite this query without using the <code>WITH</code> construct.
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
 ```sql
-SELECT dept_name
-FROM department
-GROUP BY dept_name
-HAVING SUM (salary) >= (SELECT SUM (salary) / COUNT (DISTINCT dept_name) FROM department)
+SELECT D.dept_name
+FROM department AS D, instructor AS I
+WHERE I.dept_name = D.dept_name
+GROUP BY D.dept_name
+HAVING SUM (I.salary) >= (
+    SELECT 1.0 * SUM (salary) / COUNT (DISTINCT department.dept_name) 
+    FROM department, instructor 
+    WHERE instructor.dept_name = department.dept_name)
 ```
+
+Result:
+
+| **dept_name** |
+|:-------------:|
+|   Comp. Sci.  |
+|    Finance    | 
+|    Physics    | 
 
 </details><br>
 
@@ -1146,10 +1307,16 @@ Result:
 
 
 ```sql
-SELECT ID, name
+SELECT student.ID, name
 FROM student
-WHERE 
-ORDER BY name 
+WHERE name LIKE 'D%' AND 
+      dept_name = 'History' AND
+      1 > (
+        SELECT COUNT (DISTINCT takes.course_id)
+        FROM course, takes 
+        WHERE course.course_id = takes.course_id AND
+              takes.ID = student.ID AND 
+              dept_name = 'Music');
 ```
 
 </details><br>
@@ -1166,6 +1333,64 @@ FROM instructor
 We might expect that the result of this query is zero since the average of a sel of numbers is defined to be the sum of the numbers divided by the number of numbers. Indeed this is true for the example <code>instructor</code> relation in Figure 2.1. However, there are other possible instances of that relation for which the result would not be zero. Give one such instance, and explain why the result woul not be zero.
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
+
+It is because <code>SUM(salary)/COUNT(*)</code> has the type 'int', while <code>AVG(salary)</code> has the type 'float'. Consider the following instance:
+
+| **ID** |  **name**  | **dept_name** | **salary** |
+|:------:|:----------:|:-------------:|:----------:|
+| 10101  | Srinivasan | Comp. Sci.    | 65000      |
+| 12121  | Wu         | Finance       | 90000      |
+| 15151  | Mozart     | Music         | 40000      |
+| 22222  | Einstein   | Physics       | 95000      |
+| 32343  | El Said    | History       | 60000      |
+| 33456  | Gold       | Physics       | 87000      |
+| 45565  | Katz       | Comp. Sci.    | 75000      |
+| 58583  | Califieri  | History       | 62000      |
+| 76543  | Singh      | Finance       | 80000      |
+| 76766  | Crick      | Biology       | 72000      |
+| 83821  | Brandt     | Comp. Sci.    | 92000      |
+| 98345  | Kim        | Elec. Eng.    | 80000      |
+
+Then, the following query outputs $74833.33333333333$:
+
+```sql
+SELECT AVG(salary)
+FROM instructor
+```
+
+where the following query outputs $74833$:
+
+```sql
+SELECT SUM(salary)/COUNT(*)
+FROM instructor
+```
+
+To mitigate this issue, the type inversion is necessitated:
+
+```sql
+SELECT AVG(salary)-(1.0*SUM(salary)/COUNT(*)) 
+FROM instructor
+```
+
+then this query will output $0$. Furthermore, if the table includes the tuple with <code>NULL</code> salary, the given query might return non-zero value. Consider:
+
+| **ID** |  **name**  | **dept_name** | **salary** |
+|:------:|:----------:|:-------------:|:----------:|
+| 10101  | Srinivasan | Comp. Sci.    | NULL       |
+| 12121  | Wu         | Finance       | 90000      |
+| 15151  | Mozart     | Music         | 40000      |
+| 22222  | Einstein   | Physics       | 95000      |
+| 32343  | El Said    | History       | 60000      |
+| 33456  | Gold       | Physics       | 87000      |
+| 45565  | Katz       | Comp. Sci.    | 75000      |
+| 58583  | Califieri  | History       | 62000      |
+| 76543  | Singh      | Finance       | 80000      |
+| 76766  | Crick      | Biology       | 72000      |
+| 83821  | Brandt     | Comp. Sci.    | 92000      |
+| 98345  | Kim        | Elec. Eng.    | 80000      |
+
+
+Then <code>AVG(salary) = 75727.27272727272</code> while <code>1.0 * SUM(salary)/COUNT (*) = 69416.66666666667</code> as <code>COUNT</code> also takes the instructor with <code>NULL</code> salary into account.
 
 </details><br>
 
@@ -1252,6 +1477,20 @@ Result:
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
+```sql
+SELECT DISTINCT course.course_id, course.title
+from section, course, time_slot
+WHERE section.course_id = course.course_id AND
+      dept_name = 'Comp. Sci.' AND
+      section.time_slot_id = time_slot.time_slot_id AND
+      end_hr >= 12
+```
+ 
+| **course_id** |         **title**          |
+|:-------------:|:--------------------------:|
+| CS-101        | Intro. to Computer Science |
+| CS-315        | Robotics                   | 
+
 </details><br>
 
 # 3.34
@@ -1260,6 +1499,31 @@ Result:
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
+```sql
+SELECT course_id, sec_id, year, semester, COUNT (DISTINCT ID) AS num
+FROM takes
+GROUP BY course_id, sec_id, year, semester;
+```
+
+Result:
+
+| **course_id** | **sec_id** | **year** | **semester** | **num** |
+|:-------------:|:----------:|:--------:|:------------:|:-------:|
+| BIO-101       | 1          | 2017     | Summer       | 1       |
+| BIO-301       | 1          | 2018     | Summer       | 1       |
+| CS-101        | 1          | 2017     | Fall         | 6       |
+| CS-101        | 1          | 2018     | Spring       | 1       |
+| CS-190        | 2          | 2017     | Spring       | 2       |
+| CS-315        | 1          | 2018     | Spring       | 2       |
+| CS-319        | 1          | 2018     | Spring       | 1       |
+| CS-319        | 2          | 2018     | Spring       | 1       |
+| CS-347        | 1          | 2017     | Fall         | 2       |
+| EE-181        | 1          | 2017     | Spring       | 1       |
+| FIN-201       | 1          | 2018     | Spring       | 1       |
+| HIS-351       | 1          | 2018     | Spring       | 1       |
+| MU-199        | 1          | 2018     | Spring       | 1       |
+| PHY-101       | 1          | 2017     | Fall         | 1       |
+
 </details><br>
 
 # 3.35
@@ -1267,5 +1531,22 @@ Result:
 **Question**. Using the university schema, write an SQL query to find section(s) with maximum enrollment. The result columns should appear in the order "courseid, secid, year, semester, num". (It may be convenient to use the <code>WITH</code> construct.)
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
+
+```sql
+WITH enrollment (course_id, sec_id, year, semester, num) AS (
+    SELECT course_id, sec_id, year, semester, COUNT (DISTINCT ID)
+    FROM takes
+    GROUP BY course_id, sec_id, year, semester)
+SELECT course_id, sec_id, year, semester, COUNT (DISTINCT ID) AS num
+FROM takes
+GROUP BY course_id, sec_id, year, semester
+HAVING COUNT (DISTINCT ID) >= (SELECT MAX (num) FROM enrollment)
+```
+
+Result:
+
+| **course_id** | **sec_id** | **year** | **semester** | **num** |
+|:-------------:|:----------:|:--------:|:------------:|:-------:|
+| CS-101        | 1          | 2017     | Fall         | 6       |
 
 </details><br>
