@@ -6,7 +6,7 @@ Own full solutions for exercises in "Database System Concepts - 7th edition" by 
 </p>
 
 
-- Online book content: [https://db-book.com/Practice-Exercises/index-solu.html](https://db-book.com/)
+- Online book content: https://db-book.com/
 
 **※ Note** <br>
 It is important to note that potential inaccuracies or erroneous solutions may exist; thus, I recommend to employ this repository just for reference purposes. Note that the author provided the solutions to practice exercises; [see](https://db-book.com/Practice-Exercises/index-solu.html). In case of practice exercises, you might want to refer to them first prior to my solutions. 
