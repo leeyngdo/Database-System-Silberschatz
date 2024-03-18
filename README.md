@@ -1,9 +1,15 @@
 # Database-System-Silberschatz
-Own solutions for exercises in "Database System Concepts - 7th edition" by Silberschatz, Korth and Sudarshan.
+Own full solutions for exercises in "Database System Concepts - 7th edition" by Silberschatz, Korth and Sudarshan.
 
+<p align = "center">
+<img src = "https://github.com/leeyngdo/Database-System-Silberschatz/assets/88715406/a0b8c3d6-7df1-4646-ae2b-cb271875e26b" width = "20%" height = "20%">
+</p>
+
+
+- Online book content: https://db-book.com/Practice-Exercises/index-solu.html
 
 **※ Note** <br>
-It is important to note that potential inaccuracies or erroneous solutions may exist; thus, I recommend to employ this repository just for reference purposes. Also, the author provided brief idea of solutions to most of exercises in the end of the book. You might want to refer to them first prior to my solutions. 
+It is important to note that potential inaccuracies or erroneous solutions may exist; thus, I recommend to employ this repository just for reference purposes. Note that the author provided the solutions to practice exercises; [see](https://db-book.com/Practice-Exercises/index-solu.html). In case of practice exercises, you might want to refer to them first prior to my solutions.
 
 ## Contents 
 
