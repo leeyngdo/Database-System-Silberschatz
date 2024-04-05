@@ -1,10 +1,24 @@
 # Table of Contents
 <details><summary>click to expand</summary>
 
-[2.1](#21) <br>
-[2.2](#22) <br>
-[2.3](#23) <br>
-[2.4](#24) <br>
+* [2.1](#21) <br>
+* [2.2](#22) <br>
+* [2.3](#23) <br>
+* [2.4](#24) <br>
+* [2.5](#25) <br>
+* [2.6](#26) <br>
+* [2.7](#27) <br>
+* [2.8](#28) <br>
+* [2.9](#29) <br>
+* [2.10](#210) <br>
+* [2.11](#211) <br>
+* [2.12](#212) <br>
+* [2.13](#213) <br>
+* [2.14](#214) <br>
+* [2.15](#215) <br>
+* [2.16](#216) <br>
+* [2.17](#217) <br>
+* [2.18](#218) <br>
 
 </details><br>
 
@@ -18,7 +32,9 @@
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> dawdwa
+> <code>employee(<u>person_name</u>, street, city )</code>
+> <code>works(<u>person_name</u>, company_name, salary )</code>
+> <code>company(<u>company_name</u>, city)</code>
 
 </details><br>
 
@@ -49,6 +65,20 @@
 
 > Inserting the _instructor_ tuple $t$ such that $t.{\textrm{dept}\_{-}\textrm{name}} = \textrm{"Medical"}$
 > Deleting the _department_ tuple $(\textrm{Elec. Eng.}, \textrm{Taylor}, 85000)$
+
+</details><br>
+
+# 2.4
+
+**Question**. In the instance of <em>instructor</em> shown in Figure 2.1, no two instructors have the same name. From this, can we conclude that <em>name</em> can be used as a superkey (or primary key) of <em>instructor</em>?
+
+<p align = "center">
+    <img width="300" alt="Figure 2.1." src="assets/figure-2-1.png">
+</p><br>
+
+<details><summary><strong>Answer</strong>. click to expand</summary>
+
+No. Although the <em>name</em> can uniquely identify the tuple of the given instance of the relation, this is not a general case.
 
 </details><br>
 
@@ -140,11 +170,6 @@ I guess finding ID is an errata;
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-I guess finding ID is an errata;
-
-> **a.** $\Pi_{\textrm{person} \_{-} \textrm{name}} (\textrm{employee}) - \Pi_{\textrm{person} \_{-} \textrm{name}} (\sigma_{\textrm{company} \_{-} \textrm{name} = \textrm{"BigBank"}} (\textrm{works}))$
-
-> **b.** $\Pi_{i.\textrm{person} \_{-} \textrm{name}} (\rho_{i} (\textrm{works}) \bowtie_{i.\textrm{salary} \geq j.\textrm{salary} \wedge i.\textrm{person} \_{-} \textrm{name} \neq j.\textrm{person} \_{-} \textrm{name}} \rho_{j} (\textrm{works})))$ <br>
 
 
 </details><br>
@@ -155,7 +180,7 @@ I guess finding ID is an errata;
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> 
+The term <em>relation</em> refers to the table with its elements (called tuples), i.e. a set of tuples and <em>relation schema</em> indicates the list of attributes (columns) that describes relation.
 
 </details><br>
 
@@ -163,9 +188,52 @@ I guess finding ID is an errata;
 
 **Question**. Consider the <em>advisor</em> relation shown in the schema diagram in Figure 2.9, with <em>s_id</em> as the primary key of <em>advisor</em>. Suppose a student can have more than one <em>advisor</em>. Then, would <em>s_id</em> still be a primary key of the <em>advisor</em> relation? If not, what should the primary key of <em>advisor</em> be?
 
+<p align = "center">
+    <img width="800" alt="Figure 2.9." src="assets/figure-2-9.png">
+</p><br>
+
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
->
+No. If two instructors are advising the same student, then two advisors would have the same <code>s_id</code>. Since the ID of an instructor is unique, <code>i_id</code> should be the primary key.
+
+</details><br>
+
+# 2.12
+
+**Question**. Consider the bank database of Figure 2.18. Assume that branch names and customer names uniquely identify branches and customers, but loans and accounts can be associated with more than one customer.
+
+<ol style="list-style-type: lower-alpha;">
+    <li>What are the appropriate primary keys?</li>
+    <li>Given your choice of primary keys, identify appropriate foreign keys.</li>
+</ol>
+
+<details><summary><strong>Answer</strong>. click to expand</summary>
+
+> **a.** <code>branch(<u>branch_name</u>, branch_city, assets)</code><br>
+<code>customer(<u>ID</u>, customer_name, customer_street, customer_city)</code><br>
+<code>loan(<u>loan_number</u>, <u>branch_name</u>, amount)</code><br>
+<code>borrower(<u>ID</u>, <u>loan_number</u>)</code><br>
+<code>account(<u>account_number</u>, <u>branch_name</u>, balance)</code><br>
+<code>depositor(<u>ID</u>, <u>account_number</u>)</code><br>
+
+> **b.** <code>ID</code> is the foreign key from <code>borrower</code> and <code>depositor</code>, referencing <code>customer</code>. <br>
+<code>account_number</code> is the foreign key from <code>depositor</code>, referencing <code>account</code>. <br>
+<code>branch_name</code> is the foreign key from <code>account</code>, referencing <code>branch</code>. <br>
+<code>loan_number</code> is the foreign key from <code>borrower</code>, referencing <code>loan</code>. <br>
+
+</details><br>
+
+# 2.13
+
+**Question**. Construct a schema diagram for the bank database of Figure 2.18. 
+
+<details><summary><strong>Answer</strong>. click to expand</summary>
+
+Primary keys are highlighted.
+
+<p align = "center">
+    <img width="800" alt="Answer 2.13." src="assets/answers/2.13.png">
+</p><br>
 
 </details><br>
 
@@ -206,6 +274,38 @@ I guess finding ID is an errata;
 > **a.** $`\Pi_{\textrm{loan}\_{-}\textrm{number}} (\sigma_{\textrm{amount} > \$10000} (\textrm{loan}))`$ <br>
 > **b.** $`\Pi_{\textrm{ID}} (\sigma_{\textrm{balance} >d\$6000} ( \textrm{depositor} \bowtie_{\textrm{depositor}.\textrm{account}\_{-}\textrm{name} = \textrm{account}.\textrm{account}\_{-}\textrm{name}} \textrm{account}))`$ <br>
 > **c.** $`\Pi_{\textrm{ID}} (\sigma_{\textrm{balance} > \$6000 \wedge \textrm{branch}\_{-}\textrm{name} = "\textrm{Uptown}"} ( \textrm{depositor} \bowtie_{\textrm{depositor}.\textrm{account}\_{-}\textrm{name} = \textrm{account}.\textrm{account}\_{-}\textrm{name}} \textrm{account}))`$ <br>
+
+</details><br>
+
+# 2.16
+
+**Question**. List two reasons why null values might be introduced into a database. 
+
+<details><summary><strong>Answer</strong>. click to expand</summary>
+
+
+</details><br>
+
+# 2.17
+
+**Question**. Discuss the relative merits of imperative, functional, and declarative languages. 
+
+<details><summary><strong>Answer</strong>. click to expand</summary>
+
+Merits of imperative languages
+
+    Easy to read
+    Conceptual model (solution path) is very easy for beginners to understand.
+    Characteristics of specific applications can be taken into account. for more
+
+Mertis of functional languages
+
+    Lazy Evaluation
+    Seamless Parallel Programming for more
+
+Merits of declarative languages
+
+    easy to use (since you only tell what you need).
 
 </details><br>
 
