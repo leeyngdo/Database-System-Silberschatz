@@ -100,8 +100,6 @@ Next, we consider another type of constraint on the contents of relations. Let $
     <ul>
       <li>$r_1$: <strong>referencing relation</strong>; </li>
       <li>$r_2$: <strong>referenced relation</strong>; </li>
-      <li>r1, referencing relation, instructor & r2, referenced relation, department ⇒dept_name in instructor is a foreign key from instructor; 
-      dept_name in department is the primary of department </li>
     </ul>  
   </li>
 </ul>
@@ -218,7 +216,6 @@ The (binary) <strong>Cartesian operator</strong> $\times$ combines information f
       </li>
     </ul>
   </li>
-  <li>The result is defined as the relation of $k$ columns obtained by erasing the columns that are not listed.</li>
   <li>Duplicate rows removed from the result, since relations are sets.</li>
 </ul>
 
