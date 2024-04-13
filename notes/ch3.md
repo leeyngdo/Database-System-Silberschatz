@@ -221,7 +221,7 @@ Note that the result of an SQL query is a relation.
         ```
     
 * <strong><code>DISTINCT</code> keyword</strong> inserted after <code>SELECT</code> eliminates all duplicates.
-    * In practice, duplicate elimination is time-consuming. Therefore, SQL allows duplicates in database relations as well as in the results of SQL expressions.Thus, the preceding SQL query lists each depart- ment name once for every tuple in which it appears in the instructor relation.
+    * In practice, duplicate elimination is time-consuming. Therefore, SQL allows duplicates in database relations as well as in the results of SQL expressions. Thus, the preceding SQL query lists each department name once for every tuple in which it appears in the instructor relation.
     * e.g.,
         
         ```sql
@@ -1039,3 +1039,7 @@ Scalar subqueries are also useful in SQL update statements, where they can be us
         );
         ```
 
+<br><br><br>
+
+# Reference
+**[1]** [Silberschatz, Abraham, Henry F. Korth, and Shashank Sudarshan. "Database system concepts." (2011).](https://db-book.com/) <br>

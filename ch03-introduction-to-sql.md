@@ -216,7 +216,7 @@ WHERE takes.ID = '12345' AND
 > **b.** 
 
 ```sql
-SELECT SUM (credits * points) / tot_cred
+SELECT SUM (credits * points) / SUM (credits) AS GPA
 FROM takes, course, grade_points, student
 WHERE takes.ID = '12345' AND 
       takes.grade = grade_ponts.grade AND
@@ -227,11 +227,16 @@ WHERE takes.ID = '12345' AND
 > **c.** 
 
 ```sql
-SELECT ID, SUM (credits * points) / tot_cred
+SELECT ID, SUM (credits * points) / SUM (credits) AS GPA
 FROM takes, course, grade_points, student
 WHERE takes.grade = grade_ponts.grade AND
       takes.course_id = course.course_id AND 
       takes.ID = student.ID
+GROUP BY student.ID
+UNION 
+SELECT ID, NULL AS GPA
+FROM student
+WHERE student.ID NOT IN (SELECT ID FROM takes)
 GROUP BY student.ID
 ```
 
@@ -275,15 +280,6 @@ INSERT INTO instructor
     WHERE tot_cred > 100);
 ```
 
-> **d.**
-
-```sql
-INSERT INTO instructor
-VALUE (SELECT ID, name, dept_name, 10000
-       FROM student
-       WHERE tot_cred > 100)
-```
-
 </details><br>
 
 # 3.4
@@ -315,13 +311,12 @@ WHERE participated.license_plate = owns.license_plate AND
 
 ```sql
 DELETE FROM car
-WHERE (
-    SELECT car.*
-    FROM car, owns
-    WHERE car.license_plate = owns.license_plate AND
-          car.year = 2010 AND
-          owns.driver_id = '12345'
-);
+WHERE year = 2010 
+    AND license_plate IN (
+        SELECT license_plate
+        FROM owns
+        WHERE driver_id = '12345'
+    );
 ```
 
 </details><br>
@@ -346,7 +341,7 @@ SELECT ID, (
         WHEN score < 60 THEN 'C'
         WHEN score < 80 THEN 'B'
         ELSE 'A'
-    END);
+    END) AS grade;
 FROM marks
 ```
 
@@ -356,10 +351,10 @@ FROM marks
 SELECT grade, COUNT (DISTINCT ID) AS num 
 FROM (SELECT ID, ( 
         CASE
-            WHEN score >= 80 THEN 'A'
-            WHEN 80 > score >= 60 THEN 'B'
-            WHEN 60 > score >= 40 THEN 'C'
-            ELSE 'F'
+            WHEN score < 40 THEN 'F'
+            WHEN score < 60 THEN 'C'
+            WHEN score < 80 THEN 'B'
+            ELSE 'A'
         END) AS grade
     FROM marks)
 GROUP BY grade
@@ -369,7 +364,7 @@ GROUP BY grade
 
 # 3.6
 
-**Question**. The SQL **like** operator is case sensitive (in most systems), but the <code>lower()</code> function on strings can be used to perform case-insensitive matching. To show how, write a query that finds departments whose names contain the string "sci" as a substring, regardless of the case.
+**Question**. The SQL <code>LIKE</code> operator is case sensitive (in most systems), but the <code>lower()</code> function on strings can be used to perform case-insensitive matching. To show how, write a query that finds departments whose names contain the string "sci" as a substring, regardless of the case.
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
@@ -421,10 +416,8 @@ Mathmatically, $A \times B = \emptyset$ iff $A = \emptyset$ or $B = \emptyset$. 
 
 ```sql
 SELECT DISTINCT customer.ID
-FROM customer, depositor, borrower
-WHERE customer.ID = depositor.ID AND
-      customer.ID NOT IN ( SELECT ID
-                           FROM borrower )
+FROM depositor
+WHERE depositor.ID NOT IN ( SELECT ID FROM borrower )
 ```
 
 Equivalently, 
@@ -456,6 +449,17 @@ WHERE account_number IN ( SELECT account_number
                           WHERE depositor.ID = customer.ID AND 
                                 customer_city = 'Harrison')
 ```
+
+equivalently
+
+```sql
+SELECT branch_name
+FROM account, depositor, customer
+WHERE account.account_number = depositor.account_number 
+    AND depositor.ID = customer.ID 
+    AND customer_city = 'Harrison'
+```
+
 
 </details><br>
 
@@ -509,9 +513,16 @@ WHERE company_name <> 'First Bank Corporation'
 
 ```sql
 SELECT ID
-FROM employee, works
-WHERE employee.ID = works.ID AND
-      salary > (SELECT MAX(salary) FROM works WHERE company_name = 'Small Bank Corporation')
+FROM works
+WHERE salary > (SELECT MAX(salary) FROM works WHERE company_name = 'Small Bank Corporation')
+```
+
+equivalently
+
+```sql
+SELECT ID
+FROM works
+WHERE salary > ALL (SELECT salary FROM works WHERE company_name = 'Small Bank Corporation')
 ```
 
 > **e.** 
@@ -525,26 +536,22 @@ WHERE city IN (SELECT city FROM company WHERE company_name = 'Small Bank Corpora
 > **f.** 
 
 ```sql
-WITH worker_numbers (company_name, num_workers) AS (
-    SELECT company_name, COUNT (DISTINCT works.ID) AS num_workers
-    FROM company, works
-    WHERE company.company_name = works.company_name
-    GROUP BY company_name);
 SELECT company_name
-FROM worker_numbers 
-WHERE worker_numbers.num_workers = (SELECT MAX(num_workers) FROM worker_numbers);
+FROM works
+GROUP BY company_name
+HAVING COUNT (DISTINCT ID) = ALL (
+    SELECT COUNT (DISTINCT ID)
+    FROM works
+    GROUP BY company_name)
 ```
 
 > **g.** 
 
 ```sql
-WITH avg_salaries (company_name, avg_salary) AS (
-    SELECT company_name, AVG (salary) AS avg_salary
-    FROM works
-    GROUP BY company_name);
 SELECT company_name
-FROM avg_salaries
-WHERE avg_salaries.avg_salary > (SELECT avg_salary FROM avg_salaries WHERE company_name = 'First Bank Corporation');
+FROM works
+GROUP BY company_name
+HAVING AVG (salary) > (SELECT AVG (salary) FROM works WHERE company_name = 'First Bank Corporation');
 ```
 
 </details><br>
@@ -571,7 +578,7 @@ WHERE ID = '12345'
 > **b.**
 
 ```sql
-UPDATE employee
+UPDATE works
 SET salary = salary * (
     CASE 
         WHEN 100000 < salary * 1.10 THEN 1.03
@@ -579,10 +586,10 @@ SET salary = salary * (
     END
 )
 WHERE ID IN (
-    SELECT employee.ID
+    SELECT ID
     FROM works
-    WHERE company_name = 'First Bank Corporation' AND 
-          works.ID IN (
+    WHERE company_name = 'First Bank Corporation' 
+        AND ID IN (
             --- Set of manager_id ---
             SELECT DISTINCT manager_id
             FROM manages
@@ -595,7 +602,6 @@ WHERE ID IN (
 # 3.11
 
 **Question**. Write the following queries in SQL, using the university schema.
-
 
 <ol style="list-style-type: lower-alpha;">
     <li>Find the ID and name of each student who has taken at least one Comp. Sci. course; make sure there are no duplicate names in the result.</li>
@@ -636,6 +642,16 @@ FROM student AS S
 WHERE NOT EXISTS ( SELECT * 
                    FROM takes 
                    WHERE takes.ID = S.ID AND takes.year < 2017)
+```
+
+equivalently
+
+```sql
+SELECT DISTINCT student.ID, name
+FROM student, takes, course
+WHERE student.ID = takes.ID
+GROUP BY student.ID, name
+HAVING MIN (year) >= 2017
 ```
 
 Result:
@@ -730,16 +746,17 @@ VALUES ('CS-001', 1, 'Fall', 2017, NULL, NULL, NULL)
 
 ```sql
 INSERT INTO takes
-SELECT ID, 'CS-001', 1, 'Fall', 2017, NULL
-FROM student
-WHERE dept_name = 'Comp. Sci'
+    SELECT ID, 'CS-001', 1, 'Fall', 2017, NULL
+    FROM student
+    WHERE dept_name = 'Comp. Sci'
 ```
 
 > **d.** 
 
 ```sql
 DELETE FROM takes
-WHERE ID = '12345' AND (course_id, sec_id, semester, year) = ('CS-001', '1', 'Fall', 2017)
+WHERE ID = '12345' 
+    AND (course_id, sec_id, semester, year) = ('CS-001', '1', 'Fall', 2017)
 ```
 
 > **e.** 
@@ -865,14 +882,23 @@ WHERE license_plate = 'AABB2000' AND report_number = 'AR2197';
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> **a.** 
+> **a.**
 
 ```sql
-SELECT DISTINCT customer.ID, customer_name
-FROM customer, depositor, account
-WHERE customer.ID = depositor.ID AND
-      depositor.account_number = account.account_number AND 
-      account.branch_name IN (SELECT branch_name FROM branch WHERE branch_city = 'Brookyln');
+SELECT ID
+FROM depositor AS D
+WHERE NOT EXISTS (
+    SELECT account_number
+    FROM account
+    WHERE branch_name IN (
+        SELECT branch_name
+        FROM branch
+        WHERE branch_city = 'Brookyln')
+    EXCEPT 
+    SELECT account_number
+    FROM depositor
+    WHERE depositor.ID = D.ID
+)
 ```
 
 > **b.** 
@@ -898,7 +924,10 @@ GROUP BY branch.branch_name
 ```sql
 SELECT branch_name
 FROM branch
-WHERE assets > SOME (SELECT assets FROM branch WHERE branch_city = 'Brookyln');
+WHERE assets > SOME (
+    SELECT assets 
+    FROM branch 
+    WHERE branch_city = 'Brookyln');
 ```
 
 </details><br>
@@ -948,6 +977,19 @@ WHERE E.ID = W.ID AND
       salary > (SELECT avg_salary FROM avg_salaries WHERE company_name = W.company_name)
 ```
 
+equivalently
+
+```sql
+SELECT E.ID, person_name
+FROM employee AS E, works AS W
+WHERE E.ID = W.ID AND
+      salary > (
+        SELECT AVG (salary) 
+        FROM works
+        GROUP BY company_name
+        HAVING company_name = W.company_name)
+```
+
 > **d.**
 
 ```sql
@@ -966,7 +1008,7 @@ HAVING SUM (salary) < ALL (SELECT SUM (salary) FROM works GROUP BY company_name)
 <ol style="list-style-type: lower-alpha;">
     <li>Give all employees of "First Bank Corporation" a 10 percent raise.</li>
     <li>Give all managers of "First Bank Corporation" a 10 percent raise.</li>
-    <li>Delete all tuples in the works relation for employees of "Small Bank Cor-poration".</li>
+    <li>Delete all tuples in the works relation for employees of "Small Bank Corporation".</li>
 </ol>
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
@@ -1047,9 +1089,9 @@ CREATE TABLE manages (
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> **Incomplete Data Entry**: Sometimes, during data entry, certain fields might not be filled out due to oversight or because the information is not available at the time of entry. For example, a user might not provide their middle name when filling out a form, leaving the corresponding field in the database as null.
-
-**Optional Fields**: In database schema design, certain fields may be designated as optional, meaning they are not required to have a value for every record. When these optional fields are not filled out, they will contain null values. This is common in scenarios where certain information might not be applicable to all records or where it's not mandatory to provide that information.
+> Null values in a database can arise due to various reasons, but here are two common ones: <br>
+**Missing Information**: Null values may be introduced when data is incomplete or missing. For example, if a user does not provide a value for a certain field when filling out a form or if a sensor fails to capture data, the corresponding database entry may contain a null value for that field. <br>
+**Optional Fields**: Null values can also be intentionally introduced to represent optional fields that are not applicable or not provided. In database design, certain fields may be designated as nullable, meaning they can accept null values. This allows flexibility in data entry and accommodates situations where certain information may not be available or relevant for every record.
 
 </details><br>
 
@@ -1085,9 +1127,9 @@ CREATE TABLE manages (
 > **a.** 
 
 ```sql
-SELECT DISTINCT member.memb_no, name
-FROM member, book, borrowed
-WHERE member.memb_no = borrowed.memb_no AND
+SELECT DISTINCT borrowed.memb_no, name
+FROM  borrowed, member, book
+WHERE borrowed.memb_no = member.memb_no AND
       borrowed.isbn = book.isbn AND 
       publisher = 'McGraw-Hill'
 ```
@@ -1101,7 +1143,7 @@ WHERE NOT EXISTS (
     SELECT isbn
     FROM book
     WHERE publisher = 'McGraw-Hill'
-    EXCEPT
+EXCEPT
     SELECT isbn
     FROM borrowed
     WHERE memb_no = member.memb_no);
@@ -1110,23 +1152,17 @@ WHERE NOT EXISTS (
 > **c.** 
 
 ```sql
-SELECT publisher, memb_no, name
-FROM member AS M, borrowed, book AS B
-WHERE M.memb_no = borrowed.ID AND 
-      borrowed.isbn = B.isbn AND 
-      5 < (
-        SELECT COUNT (*)
-        FROM borrowed, book
-        WHERE borrowed.isbn = book.isbn AND
-            book.publisher = B.publisher 
-            borrowed.memb_no = M.memb_no)
-GROUP BY publisher, memb_no, name
+SELECT publisher, borrowed.memb_bo, name
+FROM borrowed, book, member
+WHERE borrowed.memb_bo = member.memb_no
+GROUP BY publisher, borrowed.memb_bo, name
+HAVING COUNT (isbn) > 5
 ```
 
 > **d.**
 
 ```sql
-SELECT 1.0 * COUNT(*) / (SELECT COUNT (DISTINCT member.memb_no) FROM member)
+SELECT 1.0 * COUNT(isbn) / (SELECT COUNT (DISTINCT member.memb_no) FROM member)
 FROM borrowed
 ```
 
@@ -1149,6 +1185,20 @@ WHERE 1 >= ALL (
     SELECT COUNT (*)
     FROM course
     GROUP BY title
+)
+```
+
+or
+
+```sql
+WHERE EXISTS (
+    SELECT title
+    FROM course AS c
+    WHERE 2 <= (
+        SELECT COUNT (*)
+        FROM course AS s
+        WHERE s.title = c.title
+    )
 )
 ```
 
@@ -1184,6 +1234,22 @@ HAVING SUM (I.salary) >= (
     SELECT 1.0 * SUM (salary) / COUNT (DISTINCT department.dept_name) 
     FROM department, instructor 
     WHERE instructor.dept_name = department.dept_name)
+```
+
+or equivalently
+
+```sql
+SELECT dept_name
+FROM instructor
+GROUP BY dept_name
+HAVING SUM (salary) >= (
+    SELECT AVG (dept_total)
+    FROM (
+        SELECT dept_name, SUM (salary) AS dept_total
+        FROM instructor
+        GROUP BY dept_name
+    )
+)
 ```
 
 Result:
@@ -1231,8 +1297,8 @@ ORDER BY dept_name ASC
 
 # 3.26
 
-**Question**. Using the university schema, use SQL to do the following: For each student who has retaken a course at least twice (i.e., the student has taken the course at least three times), show the course ID and the student's ID.
-Please display your results in order of course ID and do not display duplicate rows.
+**Question**. Using the university schema, use SQL to do the following: For each student who has retaken a course at least twice (i.e., the student has taken the course at least three times), show the course ID and the student's ID. Please display your results in order of course ID and do not display duplicate rows.
+
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
@@ -1260,7 +1326,7 @@ WHERE 3 <= (
     FROM takes
     WHERE ID = T.ID 
     GROUP BY ID, course_id
-    HAVING COUNT (*) >= 2
+    HAVING COUNT (*) >= 3
 )      
 ```
 
@@ -1279,7 +1345,7 @@ WHERE NOT EXISTS (
     SELECT course_id
     FROM course
     WHERE dept_name = I.dept_name
-    EXCEPT
+EXCEPT
     SELECT course_id
     FROM teaches
     WHERE ID = I.ID
@@ -1311,12 +1377,29 @@ SELECT student.ID, name
 FROM student
 WHERE name LIKE 'D%' AND 
       dept_name = 'History' AND
-      1 > (
+      5 > (
         SELECT COUNT (DISTINCT takes.course_id)
         FROM course, takes 
         WHERE course.course_id = takes.course_id AND
               takes.ID = student.ID AND 
               dept_name = 'Music');
+```
+
+or equivalently
+
+```sql
+SELECT ID, name
+FROM student
+WHERE dept_name = 'History' 
+    AND name LIKE 'D%'
+    AND ID NOT IN (
+        /* List of ID who has take at least 5 Music courses */ 
+        SELECT ID
+        FROM takes, course
+        WHERE takes.course_id = course.course_id
+        GROUP BY dept_name, ID
+        HAVING dept_name = 'Music' AND COUNT (DISTINCT course_id) >= 5
+    )
 ```
 
 </details><br>
@@ -1390,10 +1473,15 @@ then this query will output $0$. Furthermore, if the table includes the tuple wi
 | 98345  | Kim        | Elec. Eng.    | 80000      |
 
 
-Then <code>AVG(salary) = 75727.27272727272</code> while <code>1.0 * SUM(salary)/COUNT (*) = 69416.66666666667</code> as <code>COUNT</code> also takes the instructor with <code>NULL</code> salary into account.
+Then <code>AVG(salary) = 75727.27272727272</code> while <code>1.0 * SUM(salary)/COUNT (*) = 69416.66666666667</code> as <code>COUNT</code> also takes the instructor with <code>NULL</code> salary into account, thus it yields <code>6310.606...</code>. Instead, we need to count the tuples that do not have null salary:
+
+```sql
+SELECT AVG(salary)-(1.0*SUM(salary)/COUNT(*)) 
+FROM instructor
+WHERE salary IS NOT NULL
+```
 
 </details><br>
-
 
 # 3.31
 
@@ -1414,6 +1502,22 @@ WHERE ID NOT IN (
           teaches.year = takes.year AND
           grade = 'A');
 ```
+
+or equivalently
+
+```sql
+SELECT ID, name
+FROM instructor AS teacher
+WHERE 'A' NOT IN (
+    SELECT takes.grade
+    FROM teaches, takes
+    WHERE teaches.course_id = takes.course_id AND
+          teaches.sec_id = takes.sec_id AND
+          teaches.semester = takes.semester AND
+          teaches.year = takes.year AND
+          teaches.ID = teacher.ID);
+```
+
 
 Result:
 
@@ -1495,7 +1599,8 @@ WHERE section.course_id = course.course_id AND
 
 # 3.34
 
-**Question**. Using the university schema, write an SQL query to find the number of students in each section. The result columns should appear in the order "courseid, secid, year, semester, num". You do not need to output sections with 0 students.
+**Question**. Using the university schema, write an SQL query to find the number of students in each section. The result columns should appear in the order <code>course_id, sec_id, year, semester, num</code>. You do not need to output sections with 0 students.
+
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
@@ -1528,7 +1633,7 @@ Result:
 
 # 3.35
 
-**Question**. Using the university schema, write an SQL query to find section(s) with maximum enrollment. The result columns should appear in the order "courseid, secid, year, semester, num". (It may be convenient to use the <code>WITH</code> construct.)
+**Question**. Using the university schema, write an SQL query to find section(s) with maximum enrollment. The result columns should appear in the order <code>course_id, sec_id, year, semester, num</code>. (It may be convenient to use the <code>WITH</code> construct.)
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
@@ -1541,6 +1646,19 @@ SELECT course_id, sec_id, year, semester, COUNT (DISTINCT ID) AS num
 FROM takes
 GROUP BY course_id, sec_id, year, semester
 HAVING COUNT (DISTINCT ID) >= (SELECT MAX (num) FROM enrollment)
+```
+
+or equivalently
+
+```sql
+WITH enrollment (course_id, sec_id, year, semester, num) AS (
+    SELECT course_id, sec_id, year, semester, COUNT (DISTINCT ID)
+    FROM takes
+    GROUP BY course_id, sec_id, year, semester)
+SELECT *
+FROM enrollment
+/* Note that ALL clause is not supported by SQLite */
+WHERE num >= ALL (select num FROM enrollment)
 ```
 
 Result:
