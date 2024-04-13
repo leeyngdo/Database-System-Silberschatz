@@ -18,7 +18,7 @@ It is important to note that potential inaccuracies or erroneous solutions may e
 |  **Ch 1.**  |     Introduction     | [[Click to Move]](/notes/ch1.md) | *SKIP* |
 |  **Ch 2.** | Introduction to the Relational Model | [[Click to Move]](/notes/ch2.md) | [[Click to Move]](ch02-introduction-to-the-relational-model.md) |
 |  **Ch 3.** | Introduction to SQL | [[Click to Move]](/notes/ch3.md) | [[Click to Move]](ch03-introduction-to-sql.md) |
-|  **Ch 4.** | Intermediate SQL | [[Click to Move]](/notes/ch3.md) | [[Click to Move]](ch03-introduction-to-sql.md) |
+|  **Ch 4.** | Intermediate SQL | [[Click to Move]](/notes/ch4.md) | [[Click to Move]](ch04-intermediate-sql.md) |
 |  **Ch 5.** | Advanced SQL | [[Click to Move]](/notes/ch3.md) | [[Click to Move]](ch03-introduction-to-sql.md) |
 |  **Ch 6.** | Database Design Using the E-R Mode | [[Click to Move]](/notes/ch3.md) | [[Click to Move]](ch03-introduction-to-sql.md) |
 |  **Ch 7.** | Relational Database Design | [[Click to Move]](/notes/ch3.md) | [[Click to Move]](ch03-introduction-to-sql.md) |
