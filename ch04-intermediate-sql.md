@@ -53,7 +53,7 @@ What is wrong with this query?
 
 <ol style="list-style-type: lower-alpha;">
     <li>Display a list of all instructors, showing each instructor's ID and the number of sections taught. Make sure to show the number of sections as 0 for instructors who have not taught any section. Your query should use an outer join, and should not use subqueries.</li>
-    <li>Write the same query as in part a, but using a scalar subquery and not using outer join.</li>
+    <li>Write the same query as in part (a), but using a scalar subquery and not using outer join.</li>
     <li>Display the list of all course sections offered in Spring 2018, along with the ID and name of each instructor teaching the section. If a section has more than one instructor, that section should appear as many times in the result as it has instructors. If a section does not have any instructor, it should still appear in the result with the instructor name set to "-".</li>
     <li>Display the list of all departments, with the total number of instructors in each department, without using subqueries. Make sure to show departments that have no instructors, and list those departments with an instructor count of zero.</li>
 </ol>
@@ -63,20 +63,19 @@ What is wrong with this query?
 > **a**
 
 ```sql
-SELECT instructor.id, COUNT (sec_id) AS num_secs
+SELECT ID, COUNT (sec_id) AS num_secs
 FROM instructor
-LEFT OUTER JOIN teaches
-ON instructor.id = teaches.id
-GROUP BY instructor.id
+NATURAL LEFT OUTER JOIN teaches
+GROUP BY ID
 ```
 
 > **b**
 
 ```sql
-SELECT id, (
+SELECT ID, (
     SELECT COUNT (*)
     FROM teaches
-    WHERE teaches.id = instructor.id
+    WHERE teaches.ID = instructor.ID
 ) AS num_secs
 FROM instructor
 ```
@@ -99,8 +98,6 @@ Result:
 |  98345	    |  1	       |
 
 > **c.** 
-
-Display the list of all course sections offered in Spring 2018, along with the ID and name of each instructor teaching the section. If a section has more than one instructor, that section should appear as many times in the result as it has instructors. If a section does not have any instructor, it should still appear in the result with the instructor name set to "-".
 
 ```sql
 SELECT 
@@ -129,8 +126,6 @@ Result:
 | MU-199        | 15151  | Mozart     |
 
 > **d.**
-
-Display the list of all departments, with the total number of instructors in each department, without using subqueries. Make sure to show departments that have no instructors, and list those departments with an instructor count of zero.
 
 ```sql
 SELECT dept_name, COUNT (DISTINCT id) AS num_instructors
@@ -196,22 +191,21 @@ WHERE takes.id NOT IN (SELECT id FROM student)
 
 **Question**. Suppose we have three relations $`r(A, B)`$, $`s(B, C)`$, and $`t(B, D)`$, with all attributes declared as <code>NOT NULL</code>.
 
-
 <ol style="list-style-type: lower-alpha;">
-<li> Give instances of relations $`r`$, $`s`$, and $`t`$ such that in the result of
+<li> Give instances of relations $r$, $s$, and $t$ such that in the result of
 
 ```sql 
 (r NATURAL LEFT OUTER JOIN s) NATURAL LEFT OUTER JOIN t 
 ```
 
-attribute $`C`$ has a null value but attribute D has a non-null value.</li>
-<li>Are there instances of $`r`$, $`s`$, and $`t`$ such that the result of
+attribute $C$ has a null value but attribute $D$ has a non-null value.</li>
+<li>Are there instances of $r$, $s$, and $t$ such that the result of
 
 ```sql
 r NATURAL LEFT OUTER JOIN (s NATURAL LEFT OUTER JOIN t)
 ```
 
-has a null value for $`C`$ but a non-null value for $`D`$? Explain why or why not.
+has a null value for $C$ but a non-null value for $D$? Explain why or why not.
 </li>
 </ol>
 
@@ -219,7 +213,7 @@ has a null value for $`C`$ but a non-null value for $`D`$? Explain why or why no
 
 > **a.** $`r = (1, 2)`$, $`s = (3, 1)`$, $`t = (2, 1)`$. Then natural left join $`r`$ and $`s`$ results in $`(1, 2, \text{ NULL})`$, and the final result outputs $`(1, 2, \text{ NULL }, 1)`$.
 
-> **b.** No. Natural left join $`r`$ and natural left join $`s$ between $`t`$ will assign the <code>NULL</code> value to the attributes absent in $`r`$ simulatenously, thus $`C`$ and $`D`$ should be either <code>NULL</code> or <code>NOT NULL</code>.
+> **b.** No. Natural left join $`r`$ and natural left join $`s$ between $`t`$ will assign the <code>NULL</code> value to the attributes absent in $`r`$ simulatenously, thus if $C$ has a null value, $D$ must have a null value too.
 
 </details><br>
 
@@ -228,7 +222,7 @@ has a null value for $`C`$ but a non-null value for $`D`$? Explain why or why no
 **Question**. <strong>Testing SQL queries</strong>: To test if a query specified in English has been correctly written in SQL, the SQL query is typically executed on multiple test databases, and a human checks if the SQL query result on each test database matches the intention of the specification in English.
 
 <ol style="list-style-type: lower-alpha;">
-    <li>In Section 4.1.1 we saw an example of an erroneous SQL query which was intended to find which courses had been taught by each instructor; the query computed the natural join of <code>instructor</code>, <code>teaches</code>, and <code>course</code>,and as a result it unintentionally equated the <code>dept_name</code> attribute of <code>instructor</code> and <code>course</code>. Give an example of a dataset that would help catch this particular error.</li>
+    <li>In Section 4.1.1 we saw an example of an erroneous SQL query which was intended to find which courses had been taught by each instructor; the query computed the natural join of <code>instructor</code>, <code>teaches</code>, and <code>course</code>, and as a result it unintentionally equated the <code>dept_name</code> attribute of <code>instructor</code> and <code>course</code>. Give an example of a dataset that would help catch this particular error.</li>
     <li>When creating test databases, it is important to create tuples in referenced relations that do not have any matching tuple in the referencing relation for each foreign key. Explain why, using an example query on the university database.</li>
     <li>When creating test databases, it is important to create tuples with null values for foreign-key attributes, provided the attribute is nullable (SQL allows foreign-key attributes to take on null values, as long as they are not part of the primary key and have not been declared as <code>NOT NULL</code>). Explain why, using an example query on the university database.</li>
 </ol>
@@ -237,7 +231,7 @@ has a null value for $`C`$ but a non-null value for $`D`$? Explain why or why no
 
 > **a.** When the instructor of Physics teaches the course in Math department, this tuple will not be present in the result of erroneous query. 
 
-> **b.** Because, it is useful in some scenarios, such as Exercise 4.2 (a). If the creation of tuples in referenced relations that do not have any matching tuple in the referencing relation for each foreign key, it is impossible to maintain the instructors in the database who do not teach any courses.
+> **b.** Because, it is useful in some scenarios, such as Exercise 4.2 (a). If the creation of tuples in referenced relations that do not have any matching tuple in the referencing relation for each foreign key is not allowed, it is impossible to maintain the instructors in the database who do not teach any courses.
 
 ```sql
 SELECT instructor.id, COUNT (sec_id) AS num_secs
@@ -247,7 +241,7 @@ ON instructor.id = teaches.id
 GROUP BY instructor.id
 ```
 
-> **c.** Because, it is useful in some scenarios, such as the following query. Suppose there is a student 'Alice' who doesn't decide her department yet. Now, let's say we want to retrieve the names of all students along with the names of their department. Then, without allowing <code>NULL</code> values for non-primary foreign-key attributes, t would not be possible to represent some students like Alice.
+> **c.** Because, it is useful in some scenarios, such as the following query. Suppose there is a student 'Alice' who doesn't decide her department yet. Now, let's say we want to retrieve the names of all students along with the names of their department. Then, without allowing <code>NULL</code> values for non-primary foreign-key attributes, it would not be possible to represent some students like Alice.
 
 ```sql
 INSERT INTO students (student_id, name, dept_name) VALUES 
@@ -306,11 +300,11 @@ CREATE TABLE employee
 
 CREATE TABLE works
 (
-    ID              INTEGER,
+    ID              INT,
     company_name    VARCHAR(20),
     salary          NUMERIC(7, 2),
-    PRIMARY KEY (ID)
-    FOREIGN KEY (ID) REFERENCES employee (id)
+    PRIMARY KEY (ID),
+    FOREIGN KEY (ID) REFERENCES employee (id),
     FOREIGN KEY (company_name) REFERENCES company (company_name)
 )
 
@@ -323,8 +317,8 @@ CREATE TABLE company
 
 CREATE TABLE manages
 (
-    ID              INTEGER,
-    manager_id      INTEGER,
+    ID              INT,
+    manager_id      INT,
     PRIMARY KEY (ID),
     FOREIGN KEY (ID) REFERENCES employee (id),
     FOREIGN KEY (manager_id) REFERENCES employee (id)
@@ -424,8 +418,7 @@ ON a.name = b.name AND a.address = b.address
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-The various kinds of authorization in database systems originate from the nature of database.
-
+> The various kinds of authorization in database systems originate from the nature of database.
 > **Data Sharing**: Databases may need to support data sharing among different users or applications while ensuring data isolation and confidentiality. Granular authorization controls facilitate secure data sharing by defining access permissions at a fine-grained level.
 > **Data Integrity**: Databases often store critical and sensitive information. Granular authorization controls help ensure that only authorized users can access, modify, or delete specific data, maintaining data integrity and consistency.
 > **Business Logic**: Databases support complex business processes that require different levels of access to data based on roles and responsibilities within an organization. Granular authorization allows administrators to define access levels tailored to specific user roles or groups.
@@ -438,7 +431,7 @@ The various kinds of authorization in database systems originate from the nature
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-> Suppose the granting of the role instructor (or other privileges) to Amit is done using the granted by current role clause, with the current role set to dean,instead of the grantor being the user Satoshi. Then, revoking of roles/privileges (including the role dean) from Satoshi will not result in revoking of privileges that had the grantor set to the role dean, even if Satoshi was the user who executed the grant; thus, Amit would retain the instructor role even after Satoshi’s privileges are revoked.
+> Suppose the granting of the role instructor (or other privileges) to Amit is done using the granted by current role clause, with the current role set to dean, instead of the grantor being the user Satoshi. Then, revoking of roles/privileges (including the role dean) from Satoshi will not result in revoking of privileges that had the grantor set to the role dean, even if Satoshi was the user who executed the grant; thus, Amit would retain the instructor role even after Satoshi’s privileges are revoked.
 
 </details><br>
 
@@ -460,7 +453,8 @@ The various kinds of authorization in database systems originate from the nature
 > Any tuple <code>t</code> compatible with the schema for <code>v</code> but not satisfying the <code>WHERE</code> clause in the definition of view <code>v</code> is a valid example:
 
 ```sql
-CREATE VIEW history_instructors AS SELECT * FROM instructor WHERE dept_name = 'History';
+CREATE VIEW history_instructors AS (
+    SELECT * FROM instructor WHERE dept_name = 'History');
 INSERT INTO history_instructors VALUES (1234, 'Taylor', 'Physics');
 ```
 
@@ -497,7 +491,7 @@ SELECT *
 FROM section NATURAL JOIN classroom
 ```
 
-without using a natural join but instead using an inner join with a <code>using</code> condition.
+without using a natural join but instead using an inner join with a <code>USING</code> condition.
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
@@ -571,6 +565,20 @@ LEFT OUTER JOIN advisor ON student.id = advisor.s_id
 WHERE i_id IS NULL
 ```
 
+or equivalently
+
+```sql
+SELECT id
+FROM student
+LEFT OUTER JOIN advisor
+ON student.id = advisor.s_id
+    EXCEPT 
+SELECT id
+FROM student
+INNER JOIN advisor
+ON student.id = advisor.s_id
+```
+
 </details><br>
 
 # 4.18
@@ -586,14 +594,35 @@ NATURAL LEFT OUTER JOIN manages
 WHERE manager_id IS NULL
 ```
 
+Without <code>LEFT JOIN</code>:
+
 ```sql
-SELECT id
+SELECT ID
 FROM employee
-WHERE id NOT IN (
-    SELECT id
+WHERE ID IN (
+    /* NULL manager */
+    SELECT ID
+    FROM manages
+    WHERE manager_id IS NULL
+        UNION
+    /* Not present in manager relation */
+    SELECT ID 
+    FROM employee
+    WHERE ID NOT IN (SELECT ID FROM manages)
+)
+```
+
+or equivalently
+
+```sql
+SELECT ID
+FROM employee
+WHERE ID NOT IN (
+    /* who have a manager */
+    SELECT ID
     FROM manages
     WHERE manager_id IS NOT NULL
-);
+)
 ```
 
 </details><br>
@@ -642,10 +671,9 @@ CREATE VIEW tot_credits(year, num_credits) AS (
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-Views present significant problems if updates are expressed with them. The difficulty is that a modification to the database expressed in terms of a view must be translated to a modification to the actual relations in the logical model of the database.
-
-1. Since the view may not have all the attributes of the underlying tables, insertion of a tuple into the view will insert tuples into the underlying tables, with those attributes not participating in the view getting null values. This may not be desirable, especially if the attribute in question is part of the primary key of the table. 
-2. If a view is a join of several underlying tables and an insertion results in tuples with nulls in the join columns, the desired effect of the insertion will not be achieved. In other words, an update to a view may not be expressible at all as updates to base relations. 
+> Views present significant problems if updates are expressed with them. The difficulty is that a modification to the database expressed in terms of a view must be translated to a modification to the actual relations in the logical model of the database. <br><br>
+> **Missing Attributes**: since the view may not have all the attributes of the underlying tables, insertion of a tuple into the view will insert tuples into the underlying tables, with those attributes not participating in the view getting null values. This may not be desirable, especially if the attribute in question is part of the primary key of the table. 
+> **Ambiguity**: if a view is a join of several underlying tables and an insertion results in tuples with nulls in the join columns, the desired effect of the insertion will not be achieved. In other words, an update to a view may not be expressible at all as updates to base relations. 
 
 </details><br>
 
@@ -698,7 +726,7 @@ END
 
 # 4.25
 
-**Question**. Suppose a user creates a new relation $`r1`$ with a foreign key referencing another relation $`r2`$. What authorization privilege does the user need on $`r2`$? Why should this not simply be allowed without any such authorization?
+**Question**. Suppose a user creates a new relation $`r_1`$ with a foreign key referencing another relation $`r_2`$. What authorization privilege does the user need on $`r_2`$? Why should this not simply be allowed without any such authorization?
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
