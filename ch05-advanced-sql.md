@@ -308,11 +308,11 @@ ORDER BY idx
 
 ```sql
 WITH nyse_with_month (year, month, shares_traded, dollar_volume) AS (
-    SELECT year, month, SUM (shares_traded), SUM (dolloar_volume)
+    SELECT year, month, SUM (shares_traded), SUM (dollar_volume)
     FROM nyse
     GROUP BY year, month
 )
-SELECT dolloar_volume, 
+SELECT dollar_volume, 
     AVG (dollar_volume) OVER (
         ORDER BY month ASC
         ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)
@@ -325,11 +325,11 @@ Or, query without <code>GROUP BY</code> is also possible:
 
 ```sql
 WITH nyse_with_month (year, month, shares_traded, dollar_volume) AS (
-    SELECT year, month, SUM (shares_traded), SUM (dolloar_volume)
+    SELECT year, month, SUM (shares_traded), SUM (dollar_volume)
     FROM nyse
     GROUP BY year, month
 )
-SELECT dolloar_volume, 
+SELECT dollar_volume, 
     AVG (dollar_volume) OVER (
         ORDER BY year ASC, month ASC
         ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)
