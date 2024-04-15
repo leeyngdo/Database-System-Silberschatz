@@ -321,7 +321,7 @@ GROUP BY year
 ORDER BY year ASC
 ```
 
-Or, query without <code>GROUP BY<code> is also possible:
+Or, query without <code>GROUP BY</code> is also possible:
 
 ```sql
 WITH nyse_with_month (year, month, shares_traded, dollar_volume) AS (
