@@ -11,7 +11,7 @@
 * [7.8](#78) <br>
 * [7.9](#79) <br>
 * [7.10](#710) <br>
-* [7.11](#611) <br>
+* [7.11](#711) <br>
 * [7.12](#712) <br>
 * [7.13](#713) <br>
 * [7.14](#714) <br>
@@ -961,20 +961,21 @@ In such scenarios, it is better to decompose the relation <code>inst_info</code>
 
 $$
 \begin{aligned} 
-    & \text { books }( \text{(accessionno, isbn, title, author, publisher)}  \\ 
+    & \text { books } \text{(accessionno, isbn, title, author, publisher)}  \\ 
     & \text { users }\text {(userid, name, deptid, deptname) } \\ 
     & \text { accessionno } \rightarrow \text { isbn } \\ 
     & \text { isbn } \rightarrow \text { title } \\ 
     & \text { isbn } \rightarrow \text { publisher } \\ 
     & \text { isbn } \twoheadrightarrow \text { author } \\ 
     & \text { userid } \rightarrow \text { name } \\ 
-    & \text { userid } \rightarrow \text { deptid } \\ & \text { deptid } \rightarrow \text { deptname }
+    & \text { userid } \rightarrow \text { deptid } \\ 
+    & \text { deptid } \rightarrow \text { deptname }
 \end{aligned}
 $$
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-<h4><code>users</code></h4>
+<h4><code>books</code></h4>
 
 Since the behavior of MVD is much more complex than FD, let's start with the given MVD first. 
 
@@ -1007,7 +1008,7 @@ GROUP BY B
 
 # 7.44
 
-**Question**. Given two relations $r(A, B, \text{validtime})$ and $s(B, C, \text{validtime})$, where $\text{validtime}$ denotes the valid time interval, write an SQL query to compute the temporal natural join of the two relations. You can use the $\&\&$ operator to check if two intervals overlap and the $*$ operator to compute the intersection of two intervals.
+**Question**. Given two relations $r(A, B, \text{validtime})$ and $s(B, C, \text{validtime})$, where $\text{validtime}$ denotes the valid time interval, write an SQL query to compute the temporal natural join of the two relations. You can use the <code>&&</code> operator to check if two intervals overlap and the <code>*</code> operator to compute the intersection of two intervals.
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
