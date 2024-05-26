@@ -8,7 +8,7 @@
 * [7.5](#75) <br>
 * [7.6](#76) <br>
 * [7.7](#77) <br>
-* [6.8](#68) <br>
+* [7.8](#78) <br>
 * [7.9](#79) <br>
 * [7.10](#710) <br>
 * [7.11](#611) <br>
@@ -951,7 +951,7 @@ There is no non-trivial functional dependency, and therefore the relation is in 
 * <code>(99999, David, 981-992-3443)</code>
 * <code>(99999, Alice, 981-992-3443)</code>
 
-In such scenarios, it is better to decompose the relation <code>inst_info</code> into 4NFs <code>inst_child<code> and <code>inst_phone</code>.
+In such scenarios, it is better to decompose the relation <code>inst_info</code> into 4NFs <code>inst_child</code> and <code>inst_phone</code>.
 
 </details><br>
 
