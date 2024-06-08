@@ -98,7 +98,8 @@ Since $A \to ABC$ holds, given decompositions are lossless decomposition.
 $`
 \begin{aligned}
     & C \to B \\
-    & A \to B
+    & A \to B \\
+    & AC \to B
 \end{aligned}
 `$
 
@@ -125,11 +126,11 @@ Let <code>s_id</code> and <code>i_id</code> be primary keys of <code>student</co
 
 # 7.4
 
-**Question** Use Armstrong’s axioms to prove the soundness of the union rule. (<code>Hint</code>: Use the augmentation rule to show that, if $\alpha \to \beta$, then $\alpha \to \alpha\beta$. Apply the augmentation rule again, using $\alpha \to \gamma$, and then apply the transitivity rule.)
+**Question** Use Armstrong’s axioms to prove the soundness of the union rule. (<em>Hint</em>: Use the augmentation rule to show that, if $\alpha \to \beta$, then $\alpha \to \alpha\beta$. Apply the augmentation rule again, using $\alpha \to \gamma$, and then apply the transitivity rule.)
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-Assume $\alpha \to \beta$ and $\alpha \to \gamma$. By augmentation rule, $\beta \alpha \to \beta \gamma$ holds. By reflexive rule and transitivity rule, $\alpha \to \beta \gamma$ holds. This shows the soundness of union rule.
+Assume $\alpha \to \beta$ and $\alpha \to \gamma$. By augmentation rule, $\beta \alpha \to \beta \gamma$ and $\alpha \to \beta \alpha$ hold. By transitivity rule, $\alpha \to \beta \gamma$ holds. This shows the soundness of union rule.
 
 </details><br>
 
@@ -145,7 +146,7 @@ Assume $\alpha \to \beta$ and $\gamma \beta \to \delta$. By augmentation rule, $
 
 # 7.6
 
-**Question**. Compute the closure of the following set F of functional dependencies for relation schema $R = (A, B, C, D, E)$.
+**Question**. Compute the closure of the following set $F$ of functional dependencies for relation schema $R = (A, B, C, D, E)$.
 
 $$
 \begin{aligned}
@@ -162,7 +163,7 @@ First, we can find the non-trivial dependencies with single attribute in LHS: <c
 
 Next, find the non-trivial dependencies with two attributes in LHS that <code>A, E</code> are not included: <code>BC → D, BC → E, BC → A, CD → E, CD → A, CD → B</code>
 
-Thus, <code>A, E, BC, CD</code> are candidate keys for $R$. This implies the closure of $F$ is a set of trivial FDs and following non-trivial FDs: <code>A _ → _, E _ → _, BC _ → _, CD _ → _</code> where <code>_</code> is any subset of R.
+Thus, <code>A, E, BC, CD</code> are superkeys for $R$. This implies the closure of $F$ is a set of trivial FDs and following non-trivial FDs: <code>A _ → _, E _ → _, BC _ → _, CD _ → _</code> where <code>_</code> is any subset of R.
 
 </details><br>
 
@@ -249,7 +250,7 @@ c. When a relation schema is decomposed into 3NF using the algorithm in Section 
 
 <strong>b.</strong> If the foreign key constraint is not enforced, then a deletion of a tuple from $r$, would not have a corresponding deletion from the referencing tuples in $r_2$. Instead of deleting a tuple from $r$, this would amount to simply setting the value of $\alpha$ to <code>NULL</code> in some tuples. 
 
-<strong>c.</strong> For every schema $r_i (\alpha \beta)$ added to the decomposition because of a functional dependency $\alpha \to \beta$, $\alpha$ should be made the primary key. Also, a candidate key $\gamma$ for the original relation is located in some newly created relation $r_k$ and should be also a primary key for that relation.
+<strong>c.</strong> For every schema $r_i$, $(\alpha, \beta)$ added to the decomposition because of a functional dependency $\alpha \to \beta$, $\alpha$ should be made the primary key. Also, a candidate key $\gamma$ for the original relation is located in some newly created relation $r_k$ and should be also a primary key for that relation.
 
 Foreign-key constraints are created as follows: for each relation $r$; created above, if the primary key attributes of $r_i$ also occur in any other relation $r_j$, then a foreign-key constraint is created from those attributes in $r_j$, referencing (the primary key of) $r_i$.
 
@@ -280,7 +281,7 @@ t[R_1] \bowtie t[R_2] \bowtie \dots \bowtie t[R_n] = \Pi_{U} (\sigma_p (t[R_1] \
 where the condition $p$ is satisfied if values of attributes with the same name
 in a tuple are equal. Note that the Cartesian product of single tuples generates one tuple.
 
-The selection process is satisfied because all attributes with the same name must have the same value since they are projections from the same tuple. And the projection to $U$ removes duplicate attribute names. By definition of deomposition $U = R_1 \cup R_2 \cup \dots \cup R_n$, all attributes of $t$ are in $t[R_1] \bowtie t [R_2] \bowtie \dots t[R_n]$. That is, $t = t[R_1] \bowtie t [R_2] \bowtie \dots t[R_n]$. 
+The selection process is satisfied because all attributes with the same name must have the same value since they are projections from the same tuple. And the projection to $U$ removes duplicate attribute names. By definition of decomposition $U = R_1 \cup R_2 \cup \dots \cup R_n$, all attributes of $t$ are in $t[R_1] \bowtie t [R_2] \bowtie \dots t[R_n]$. That is, $t = t[R_1] \bowtie t [R_2] \bowtie \dots t[R_n]$. 
 
 </details><br>
 
@@ -290,7 +291,7 @@ The selection process is satisfied because all attributes with the same name mus
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-Note that $F_1$ contains $A \to BC$, $A \to ABC$, $A \to A$, $A \to B$, $A \to C$, $AB \to A$, $AB \to B$, $AB \to C$, $AB \to AB$, $AB \to BC$, $AB \to AC$, $AB \to ABC$, $AC \to A$, $AC \to B$, $AC \to C$, $AC \to AB$, $AC \to BC$, $AC \to AC$, $AC \to ABC$, $AC \to  $AC \to ABC$, $BC \to B$, $BC \to C$, $BC \to BC$, $BC \to ABC$.
+Note that $F_1$ contains $A \to BC$, $A \to ABC$, $A \to A$, $A \to B$, $A \to C$, $AB \to A$, $AB \to B$, $AB \to C$, $AB \to AB$, $AB \to BC$, $AB \to AC$, $AB \to ABC$, $AC \to A$, $AC \to B$, $AC \to C$, $AC \to AB$, $AC \to BC$, $AC \to AC$, $AC \to ABC$, $BC \to B$, $BC \to C$, $BC \to BC$, $BC \to ABC$.
 
 And $F_2$ contains only trivial dependencies. Hence, it is trivial that $(F_1 \cup F_2)^+$ cannot contain $B \to D$, which shows that the decomposition in Exercise 7.1 is not a dependency-preserving decomposition.
 
@@ -387,10 +388,10 @@ $`
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
-<strong>1.</strong> Suppose $R$ is in 3NF according to the textbook definition. We show that it is in 3NF according to the definition in this exercise. Suppose this is false. That is, there exists $A$ be a nonprime attribute in $R$ that is transitively dependent on a key for $R$. Then there exists $\alpha \to \beta$ where $\beta$ is a key for $R$, $\beta \to A$ holds but $\beta \to \alpha$ doesn't hold, $\beta \to A$, $A \notin \alpha$, and $A \notin \beta$. But this violates the definition of 3NF, which is the contradiction:
+<strong>1.</strong> Suppose $R$ is in 3NF according to the textbook definition. We show that it is in 3NF according to the definition in this exercise. Suppose this is false. That is, there exists $A$ be a nonprime attribute in $R$ that is transitively dependent on a key for $R$. Then there exists $\alpha \to \beta$ where $\alpha$ is a key for $R$, $\beta \to A$ holds but $\beta \to \alpha$ doesn't hold, $\beta \to A$, $A \notin \alpha$, and $A \notin \beta$. But this violates the definition of 3NF, which is the contradiction:
 
 * $\beta \to A$ is non-trivial;
-* $\beta \to R$ does not hold as $\beta \not\to \alpha$; 
+* $\beta \to R$ does not hold as $\beta \not\to \alpha$. If $\beta$ is a key, $\beta \to \alpha$ should be satisfied; 
 * $A - \beta = A$ is not contained in the candidate keys of $R$ since $A$ is non-prime;
 
 <strong>2.</strong> Suppose $R$ is in 3NF according to the definition in this exercise. We show that it is in 3NF according to the textbook definition. Let $\alpha \to \beta$ be any non-trivial FDs on $R$. Suppose $R$ is not in 3NF according to the textbook definition. Then there is a non-trivial FD $\alpha \to \beta$ such that
@@ -637,7 +638,9 @@ e. Give a BCNF decomposition of the given schema using the original set $F$ of f
 
 <strong>b.</strong> Note that $A \to ABCDE$. By augmentation rule, $AG \to R$. 
 
-<strong>c.</strong> 1. $F_c = (A \to BCD, BC \to E, B \to D, D \to A)$ as $D$ in $BC \to DE$ is extraneous by $B\ to D$.
+<strong>c.</strong> 
+
+1. $F_c = (A \to BCD, BC \to E, B \to D, D \to A)$ as $D$ in $BC \to DE$ is extraneous by $B \to D$. <br>
 2. $F_c = (A \to BC, BC \to E, B \to D, D \to A)$ as $D$ in $A \to BCD$ is extraneous by $B \to D$.
 
 Thus, 
@@ -708,16 +711,13 @@ $$
 \end{aligned}
 $$
 
-a. Find a nontrivial functional dependency containing no extraneous at-
-tributes that is logically implied by the above three dependencies and ex-
-plain how you found it.
+a. Find a nontrivial functional dependency containing no extraneous attributes that is logically implied by the above three dependencies and explain how you found it.
 
 b. Use the BCNF decomposition algorithm to find a BCNF decomposition of $R$. Start with $A \to BC$. Explain your steps.
 
 c. For your decomposition, state whether it is lossless and explain why.
 
-d. For your decomposition, state whether it is dependency preserving and
-explain why.
+d. For your decomposition, state whether it is dependency preserving and explain why.
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
@@ -819,9 +819,10 @@ Thus, $F_c = (AB \to D, D \to C, DE \to B, DEH \to A, AC \to D)$.
 <strong>c.</strong> 3NF decomposition of $R$ can be obtained as follows:
 
 1. $R_1 = (A, B, D)$, $R_2 = (C, D)$, $R_3 = (B, D, E)$, $R_4 = (A, D, E, H)$ and $R_5 = (A, C, D)$;
-3. Since $R_2 \subseteq R_5$, delete $R2$. 
+2. None of decomposed scehmas include candidate key; $R_6 = (D, E, H, G)$
+3. Since $R_2 \subseteq R_5$, delete $R_2$. 
 
-<strong>d.</strong> $R_1 = (A, B, D)$, $R_2 = (B, D, E)$, $R_3 = (A, D, E, H)$ and $R_4 = (A, C, D)$;
+<strong>d.</strong> $R_1 = (A, B, D)$, $R_2 = (B, D, E)$, $R_3 = (A, D, E, H)$, $R_4 = (A, C, D)$, $R_5 = (D, E, H, G)$;
 
 </details><br>
 
