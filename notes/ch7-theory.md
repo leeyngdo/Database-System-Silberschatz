@@ -577,8 +577,143 @@ Let $\alpha$, $\beta$, $\gamma$, and $\delta$ be sets of attributes of a relatio
   <li><strong style="color:blue">Augmentation rule</strong>: $\alpha \twoheadrightarrow \beta \wedge \gamma \subseteq \delta \implies \alpha\delta \twoheadrightarrow \beta\gamma$</li>
   <li><strong style="color:blue">Transitivity rule</strong>: $\alpha \twoheadrightarrow \beta \wedge \beta \twoheadrightarrow \gamma \implies \alpha \twoheadrightarrow \gamma - \beta$</li>
   <li><strong style="color:blue">Replication rule</strong>: $\alpha \to \beta \implies \alpha \twoheadrightarrow \beta$</li>
-  <li><strong style="color:blue">Coalescence rule</strong>: $\alpha \twoheadrightarrow \beta \wedge \exists \delta: (\delta \cap \beta = \varnothing \wedge \delta \to \gamma ) \wedge \gamma \subseteq \beta \implies \alpha \to \gamma$</li>
+  <li><strong style="color:blue">Coalescence rule</strong>: $\alpha \twoheadrightarrow \beta \wedge \exists \delta: (\delta \cap \beta = \varnothing \wedge \delta \to \gamma \wedge \gamma \subseteq \beta) \implies \alpha \to \gamma$</li>
 </ul>
+
+<details>
+<summary style="color:blue">$\color{blue}{\mathbf{Proof.}}$ Soundness</summary>
+<div markdown="1">
+
+Since complementation rule and replication rule are trival, this proof only shows the soundness of remaining 3 rules.
+
+<h4>Augmentation rule</h4>
+
+Assume $\alpha \twoheadrightarrow \beta$ and $\gamma \subseteq \delta$. Since trivial FD $\delta \subseteq \gamma$ holds, by replication rule $\delta \twoheadrightarrow \gamma$ also holds. Then, 
+
+* For any tuples $t_1, t_2 \in R$ with $t_1[\alpha] = t_2[\alpha]$ and $t_1[\delta] = t_2[\delta]$ (that is, $t_1[\alpha\delta] = t_2[\alpha\delta]$), there exist tuples $t_3, t_4 \in R$ such that
+  * $t_3[\alpha\delta] = t_4 [\alpha\delta] = t_1[\alpha\delta]$
+  * thus $t_3[\alpha] = t_4[\alpha] = t_1[\alpha]$ and $t_3[\delta] = t_4[\delta] = t_1[\delta]$
+  * due to $\alpha \twoheadrightarrow \beta$
+    * $t_3[\beta] = t_1[\beta]$
+    * $t_3[R - \beta] = t_2[R - \beta]$
+    * $t_4[\beta] = t_2[\beta]$
+    * $t_4[R - \beta] = t_1[R - \beta]$
+  * due to $\gamma \subseteq \delta$
+    * $t_3[\delta] = t_1[\delta] \implies t_3[\gamma] = t_1[\gamma]$ 
+    * $t_3[R - \beta] = t_2[R - \beta] \implies t_3[R - \beta\gamma] = t_2[R - \beta\gamma]$ since $R - \beta\gamma \subseteq R - \beta$
+    * $t_4[\delta] = t_2[\delta] \implies t_4[\gamma] = t_4[\gamma]$ 
+    * $t_4[R - \beta] = t_1[R - \beta] \implies t_4[R - \beta\gamma] = t_1[R - \beta\gamma]$ since $R - \beta\gamma \subseteq R - \beta$
+
+This implies $\alpha\delta \twoheadrightarrow \beta\gamma$.
+
+<h4>Transitivity rule</h4>
+
+Assume $\alpha \twoheadrightarrow \beta$ and $\beta \twoheadrightarrow \gamma$. Then, 
+
+* For any tuples $t_1, t_2 \in R$ with $t_1[\alpha] = t_2[\alpha]$, there exist tuples $t_3, t_4 \in R$ such that
+  * $t_3 [\alpha] = t_4[\alpha] = t_1[\alpha] = t_2[\alpha]$
+  * $t_3 [\beta] = t_1[\beta]$
+  * $t_3 [R - \beta] = t_2[R - \beta] \implies t_3 [\gamma - \beta] = t_2[\gamma - \beta]$ since $\gamma - \beta \subseteq R - \beta$.
+  * $t_4 [\beta] = t_2[\beta]$
+  * $t_4 [R - \beta] = t_1[R - \beta] \implies t_4 [\gamma - \beta] = t_1[\gamma - \beta]$ since $\gamma - \beta \subseteq R - \beta$.
+* From $\beta \twoheadrightarrow \gamma$, there exist $t_5, t_6 \in R$ such that
+  * for $t_3[\beta] = t_1[\beta]$
+    * $t_5 [\beta] = t_1[\beta]$
+    * $t_5 [\gamma] = t_3[ \gamma ]$
+    * $t_5 [R - \gamma] = t_1 [R - \gamma]$
+    * that is, $t_5 [R - (\gamma - \beta)] = t_1 [R - (\gamma - \beta)]$ since $R - (\gamma - \beta) = (R - \gamma) \cup \beta$
+  * for $t_4[\beta] = t_2[\beta]$
+    * $t_6 [\beta] = t_2[\beta]$
+    * $t_6 [\gamma] = t_4[ \gamma ]$
+    * $t_6 [R - \gamma] = t_2 [R - \gamma]$
+    * that is, $t_6 [R - (\gamma - \beta)] = t_2 [R - (\gamma - \beta)]$ since $R - (\gamma - \beta) = (R - \gamma) \cup \beta$
+
+Hence, there exist tuples $t_5, t_6 \in R$ such that
+  * $t_5[\alpha] = t_1[\alpha] = t_2[\alpha]$ since for any attribute $A \in \alpha$
+    * If an attribute $A \in (R - \gamma) \cap \alpha$
+      * $t_5 [A] = t_1[A]$ by $t_5 [R - \gamma] = t_1 [R - \gamma]$
+    * If an attribute $A \in \gamma \cap \alpha$
+      * $t_5 [A] = t_3[A]$ by $t_5 [\gamma] = t_3[ \gamma ]$
+      * $t_3 [A] = t_1[A]$ by $t_3[\alpha] = t_1[\alpha]$
+  * $t_6[\alpha] = t_1[\alpha] = t_2[\alpha]$ analogously
+  * $t_5[ \gamma - \beta ] = t_3 [ \gamma - \beta ] = t_2[\gamma - \beta]$
+  * $t_5[ R - (\gamma - \beta)] = t_1 [ R - (\gamma - \beta)]$
+  * $t_6[ \gamma - \beta ] = t_4 [ \gamma - \beta ] = t_1[\gamma - \beta]$
+  * $t_6[ R - (\gamma - \beta)] = t_2 [ R - (\gamma - \beta)]$
+
+
+<h4>Coalesence rule</h4>
+
+Assume $\alpha \twoheadrightarrow \beta$ and there exists $\delta \subset R$ such that $\delta \cap \beta = \varnothing$, $\delta \to \gamma$, $\gamma \subseteq \beta$. Then, 
+
+* For any tuples $t_1, t_2 \in R$ with $t_1[\alpha] = t_2[\alpha]$, 
+  * By $\alpha \twoheadrightarrow \beta$, there exist tuples $t_3 \in R$ such that
+    * $t_1 [\alpha] = t_2[\alpha] = t_3 [\alpha]$
+    * $t_3[\beta] = t_1[\beta] \implies t_3[\gamma] = t_1[\gamma]$ since $\gamma \subseteq \beta$
+    * $t_3[R - \beta] = t_2[R - \beta] \implies t_3[\delta] = t_2[\delta]$ since $\delta \subseteq R - \beta$
+  * From $\delta \to \gamma$, $t_3[\delta] = t_2[\delta]$ implies $t_3 [\gamma] = t_2 [\gamma]$. 
+  * That is, $t_1[ \gamma] = t_2[\gamma]$
+
+This implies $\alpha \to \gamma$.
+
+$$\tag*{$\blacksquare$}$$
+
+</div>
+</details>
+
+</div><br>
+
+We can further simplify calculating the closure of $D$ by using the following rules, derivable from the previous ones: 
+
+<div style="border:1px solid #bf1100; padding:10px;">
+
+$\color{#bf1100}{\mathbf{Remark.}}$ <span style="color:#bf1100">Addtional rules</span><br>
+
+Some additional rules can be inferred from Armstrong’s axioms:
+
+<ul>
+  <li><strong>Union rule</strong>: $\alpha \twoheadrightarrow \beta \wedge \alpha \twoheadrightarrow \gamma \implies \alpha \twoheadrightarrow \beta \gamma$ </li>
+  <li><strong>Intersection rule</strong>: $\alpha \twoheadrightarrow \beta \wedge \alpha \twoheadrightarrow \gamma \implies \alpha \twoheadrightarrow \beta \cap \gamma$ </li>
+  <li><strong>Difference rule</strong>: $\alpha \twoheadrightarrow \beta \wedge \alpha \twoheadrightarrow \gamma \implies \alpha \twoheadrightarrow \beta - \gamma \wedge \alpha \twoheadrightarrow \gamma - \beta$</li>
+</ul>
+
+<details>
+<summary style="color:#bf1100">$\color{#bf1100}{\mathbf{Proof.}}$ Soundness</summary>
+<div markdown="1">
+
+<h4>Union rule</h4>
+
+$$
+\begin{aligned} 
+  & \alpha \twoheadrightarrow \gamma & \\
+  & \alpha \twoheadrightarrow \alpha\gamma & \textrm{ augmentation rule } \\
+  & \alpha \twoheadrightarrow \beta & \\
+  & \alpha\gamma \twoheadrightarrow \beta\gamma & \textrm{ augmentation rule } \\
+  & \alpha\gamma \twoheadrightarrow R - \alpha\beta\gamma & \textrm{ complementation rule } \\
+  & \alpha \twoheadrightarrow R - \alpha\beta\gamma & \textrm{ transitivity rule } \\
+  & \alpha \twoheadrightarrow \beta\gamma & \textrm{ complementation rule } \\
+\end{aligned}
+$$
+
+<h4>Intersection rule</h4>
+
+$$
+\begin{aligned} 
+  & \alpha \twoheadrightarrow R - \gamma & \textrm{ complementation rule } \\
+  & \alpha \twoheadrightarrow R - \beta & \textrm{ complementation rule } \\
+  & \alpha \twoheadrightarrow (R - \beta\gamma) \cup (\beta \cap \gamma) & \textrm{ union rule } \\
+  & \alpha \twoheadrightarrow \beta \cap \gamma & \textrm{ complementation rule } \\
+\end{aligned}
+$$
+
+<h4>Difference rule</h4>
+
+This rule can be simply derived from complementation rule and intersection rule. By complementation rule, $\alpha \twoheadrightarrow R - \gamma = \gamma^c$. By intersection rule between $\alpha \twoheadrightarrow \gamma^c$ and $\alpha \twoheadrightarrow \beta$, $\alpha \twoheadrightarrow \beta \cap \gamma^c = \beta - \gamma$ holds.
+
+$$\tag*{$\blacksquare$}$$
+
+</div>
+</details>
 
 </div><br>
 
@@ -597,5 +732,5 @@ $$
 
 # Reference
 **[1]** [Silberschatz, Abraham, Henry F. Korth, and Shashank Sudarshan. "Database system concepts." (2011).](https://db-book.com/) <br>
-
+**[2]** [C.Beeri, R.Fagin, and J.H.Howard, "A Complete Axiomatization for Functional and Multivalued Dependencies in Database Relations", Proc. of 1977 ACM SIGMOD Conference](https://dl.acm.org/doi/10.1145/509404.509414) <br>
 

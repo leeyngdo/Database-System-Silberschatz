@@ -983,7 +983,7 @@ $$
 Since the behavior of MVD is much more complex than FD, let's start with the given MVD first. 
 
 * <code>α = isbn</code> and <code>β = author</code> $\implies$ <code>R_1 = (isbn, author)</code>, <code>R_2 = (accessionno, isbn, title, publisher)</code>
-* <code>α = accessionno</code> and <code>β = isbn</code> $\implies$ <code>R_1 = (isbn, author)</code>, <code>R_2 = (accessionno, isbn)</code>, <code>R_3 = (accessionno, title, publisher)</code>
+* <code>α = isbn</code> and <code>β = title, publisher</code> $\implies$ <code>R_1 = (isbn, author)</code>, <code>R_2 = (isbn, title, publisher)</code>, <code>R_3 = (accessionno, isbn)</code>
 
 <h4><code>users</code></h4>
 
