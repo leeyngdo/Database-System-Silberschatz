@@ -841,8 +841,10 @@ F := \{A \to BC, CD \to E, B \to D, E \to A \}
 Take the decomposition of $R$ given on Exercise 7.29:
 
 $`
+\begin{gathered}
 (A,B,C) \\
 (C,D,E) \\
+\end{gathered}
 `$
 
 Then, each decomposed schema is obviously BCNF, but we already showed that this decomposition is lossy.
@@ -938,7 +940,7 @@ To prove $A \twoheadrightarrow B$, we need $t_3 [C] = t_2[C]$ to show $t_3 [ACD]
 
 First of all, 4NF is higher normal form than BCNF; every 4NF is in BCNF.
 
-Second, BCNF may not be sufficient to avoid the redundancy; there are database schemas in BCNF that do not seem to be sufficiently normalized. For example, consider the relation <code>inst_info (ID, child_name, phone)</code> with no non-trivial FD. Since an instructor may have more than one phone and can have multiple children, the following example instance is possible:
+Second, BCNF may not be sufficient to avoid from multi-valued attributes; there are database schemas in BCNF that do not seem to be sufficiently normalized. For example, consider the relation <code>inst_info (ID, child_name, phone)</code> with no non-trivial FD. Since an instructor may have more than one phone and can have multiple children, the following example instance is possible:
 
 |  <code>ID</code>  | <code>child_name</code> | <code>phone</code> |
 |:-----------------:|:-----------------------:|:------------------:|
