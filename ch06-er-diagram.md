@@ -13,7 +13,7 @@
 * [6.10](#610) <br>
 * [6.11](#611) <br>
 * [6.12](#612) <br>
-
+* [6.13](#613) <br>
 * [6.14](#614) <br>
 * [6.15](#615) <br>
 * [6.16](#616) <br>
@@ -94,8 +94,8 @@
 
 **Question** An E-R diagram can be viewed as a graph. What do the following mean in terms of the structure of an enterprise schema?
 
-    a. The graph is disconnected.
-    b. The graph has a cycle.
+a. The graph is disconnected.
+b. The graph has a cycle.
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
@@ -111,11 +111,11 @@ Note that a path in the graph between a pair of entity sets indicates a (possibl
 
 **Question**. Consider the representation of the ternary relationship of Figure 6.29a using the binary relationships illustrated in Figure 6.29b (attributes not shown).
 
-    a. Show a simple instance of $`E`$, $`A`$, $`B`$, $`C`$, $`R_A`$, $`R_B`$, and $`R_C`$ that cannot correspond to any instance of $`A`$, $`B`$, $`C`$, and $`R`$.
-    
-    b. Modify the E-R diagram of Figure 6.29b to introduce constraints that will guarantee that any instance of $`E`$, $`A`$, $`B`$, $`C`$, $`R_A`$, $`R_B`$, and $`R_C`$ that satisfies the constraints will correspond to an instance of $`A`$, $`B`$, $`C`$, and $`R`$.
-    
-    c. Modify the preceding translation to handle total participation constraints on the ternary relationship. 
+a. Show a simple instance of $`E`$, $`A`$, $`B`$, $`C`$, $`R_A`$, $`R_B`$, and $`R_C`$ that cannot correspond to any instance of $`A`$, $`B`$, $`C`$, and $`R`$.
+
+b. Modify the E-R diagram of Figure 6.29b to introduce constraints that will guarantee that any instance of $`E`$, $`A`$, $`B`$, $`C`$, $`R_A`$, $`R_B`$, and $`R_C`$ that satisfies the constraints will correspond to an instance of $`A`$, $`B`$, $`C`$, and $`R`$.
+
+c. Modify the preceding translation to handle total participation constraints on the ternary relationship. 
 
 <p align = "center">
     <img width="800" alt="Figure 6.29" src="assets/figure-6-29.png">
@@ -180,9 +180,9 @@ Note that a path in the graph between a pair of entity sets indicates a (possibl
 
 **Question**. In SQL, foreign key constraints can reference only the primary key attributes of the referenced relation or other attributes declared to be a superkey using the <code>UNIQUE</code> constraint. As a result, total participation constraints on a many-to-many relationship set (or on the "one" side of a one-to-many relationship set) cannot be enforced on the relations created from the relationship set, using primary key, foreign key, and not null constraints on the relations.
 
-    a. Explain why.
+a. Explain why.
 
-    b. Explain how to enforce total participation constraints using complex check constraints or assertions (see Section 4.4.8). (Unfortunately, these features are not supported on any widely used database currently.)
+b. Explain how to enforce total participation constraints using complex check constraints or assertions (see Section 4.4.8). (Unfortunately, these features are not supported on any widely used database currently.)
 
 <details><summary><strong>Answer</strong>. click to expand</summary>
 
@@ -220,9 +220,9 @@ For entity sets $A$, $B$, and $C$, explain how attributes are inherited from the
 **Question**. An E-R diagram usually models the state of an enterprise at a point in time. Suppose we wish to track temporal changes, that is, changes to data over time. For example, Zhang may have been a student between September 2015 and May 2019, while Shankar may have had instructor Einstein as advisor from May 2018 to December 2018, and again from June 2019 to January 2020. Similary, attribute values of an entity or relationship, such as title and credits of course, salary, or even name of instructor, and tot_cred of student, can change over time.
 One way to model temporal changes is as follows: We define a new data type called <strong>valid_time</strong>, which is a time interval, or a set of time intervals. We then associate a valid_time attribute with each entity and relationship, recording the time periods during which the entity or relationship is valid. The end time of an interval can be infinity; for example, if Shankar became a student in September 2018, and is still a student, we can represent the end time of the valid_time interval as infinity for the Shankar entity. Similarly, we model attributes that can change over time as a set of values, each with its own valid_time.
 
-    a. Draw an E-R diagram with the student and instructor entities, and the advisor relationship, with the above extensions to track temporal changes.
+a. Draw an E-R diagram with the student and instructor entities, and the advisor relationship, with the above extensions to track temporal changes.
 
-    b. Convert the E-R diagram discussed above into a set of relations.
+b. Convert the E-R diagram discussed above into a set of relations.
 
 It should be clear that the set of relations generated is rather complex, leading to difficulties in tasks such as writing queries in SQL. An alternative approach, which is used more widely, is to ignore temporal changes when designing the E-R model (in particular, temporal changes to attribute values), and to modify the relations generated from the E-R Model to track temporal changes.
 
