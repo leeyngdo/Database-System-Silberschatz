@@ -285,9 +285,9 @@ It should be clear that the set of relations generated is rather complex, leadin
 
 **Question**. Consider two entity sets $A$ and $B$ that both have the attribute $X$ (among others whose names are not relevant to this question).
 
-a. If the two $X$s are completely unrelated, how should the design be improved?
+a. If the two $X$ s are completely unrelated, how should the design be improved?
 
-b. If the two $X$s represent the same property and it is one that applies both
+b. If the two $X$ s represent the same property and it is one that applies both
 to $A$ and to $B$, how should the design be improved? Consider three subcases: 
 
 * $X$ is the primary key for $A$ but not $B$
