@@ -22,7 +22,7 @@
 * [6.19](#619) <br>
 * [6.20](#620) <br>
 * [6.21](#621) <br>
-
+* [6.22](#622) <br>
 * [6.23](#623) <br>
 * [6.24](#624) <br>
 * [6.25](#625) <br>
@@ -204,7 +204,7 @@ SET CONSTRAINT total_part DEFERRED;
 **Question**. Consider the following lattice structure of generalization and specialization (attributes are not shown).
 
 <p align = "center">
-    <img width="800" alt="Exercise 6.12" src="assets/exercise-6-12.png">
+    <img width="400" alt="Exercise 6.12" src="assets/exercise-6-12.png">
 </p><br>
 
 For entity sets $A$, $B$, and $C$, explain how attributes are inherited from the higher level entity sets $X$ and $Y$. Discuss how to handle a case where an attribute of $X$ has the same name as some attribute of $Y$.
